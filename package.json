@@ -1,0 +1,27 @@
+{
+  "name": "battleship",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/mel-121821/battleship#readme",
+  "bugs": {
+    "url": "https://github.com/mel-121821/battleship/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mel-121821/battleship.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "script.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "@babel/preset-env": "^7.29.5",
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.3.0",
+    "globals": "^17.6.0",
+    "jest": "^30.4.1"
+  }
+}
