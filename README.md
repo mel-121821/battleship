@@ -4,7 +4,7 @@
 
 ### Instructions
 
-**_ Use TDD for this project _**
+**Use TDD for this project**
 
 **Stage 1:**
 
@@ -14,7 +14,7 @@ Your ‘ships’ will be objects that include their length, the number of times 
 
 REMEMBER you only have to test your object’s public interface. Only methods or properties that are used outside of your ‘ship’ object need unit tests.
 
--[] Ships should have a `hit()` function that increases the number of ‘hits’ in your ship.
+- [] Ships should have a `hit()` function that increases the number of ‘hits’ in your ship.
 
 - [] `isSunk()` should be a function that calculates whether a ship is considered sunk based on its length and the number of hits it has received.
 
@@ -26,7 +26,7 @@ Note that we have not yet created any User Interface. We should know our code is
 
 - [] Gameboards should be able to place ships at specific coordinates by calling the ship factory or class.
 
--[] Gameboards should have a `receiveAttack` function that takes a pair of coordinates, determines whether or not the attack hit a ship and then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot.
+- [] Gameboards should have a `receiveAttack` function that takes a pair of coordinates, determines whether or not the attack hit a ship and then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot.
 
 - [] Gameboards should keep track of missed attacks so they can display them properly.
 
@@ -126,8 +126,16 @@ https://jestjs.io/docs/webpack
 ---
 
 **BUG:** `exclude: ["node-modules"]` in webpack.common.js caused the following error:
-`Invalid configuration object. Webpack has been initialized using a configuration object that does not match the API schema....`
+
+```
+Invalid configuration object. Webpack has been initialized using a configuration object that does not match the API schema....
+```
+
 [cont...]
-` ...* configuration.module.rules[0].exclude[0]: The provided value "node_modules" is not an absolute path!`
+
+```
+* configuration.module.rules[0].exclude[0]: The provided value "node_modules" is not an absolute path!
+
+```
 
 **FIX:** Removed `exclude: ["node-modules"]` as it was added while troubleshooting webpack/jest and was not being used
