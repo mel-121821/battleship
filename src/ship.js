@@ -2,30 +2,22 @@
 
 // Carrier: 5
 // Battleship: 4
-// Destroyerr: 3
+// Destroyer: 3
 // Submarine: 3
 // Patrol Boat: 2
 
 class Ship {
-  constructor(coords, dir, len) {
-    this.coords = coords;
-    this.dir = dir;
-    this.len = len;
-    this.area = this.buildShip(coords, dir, len);
+  constructor(shipCoords) {
+    this.shipCoords = shipCoords;
+    this.area = this.buildShip(shipCoords);
     this.hits = 0;
     this.sunk = false;
   }
 
-  buildShip(coords, dir, len) {
+  buildShip(shipCoords) {
     const area = [];
-    if (dir === "hor") {
-      for (let i = 0; i < len; i++) {
-        area.push(new Node(coords[0], coords[1]++));
-      }
-    } else {
-      for (let i = 0; i < len; i++) {
-        area.push(new Node(coords[0]++, coords[1]));
-      }
+    for (let coords of shipCoords) {
+      area.push(new Node(coords[0], coords[1]));
     }
     return area;
   }
@@ -50,8 +42,4 @@ class Node {
   }
 }
 
-const carrier = new Ship([0, 0], "hor", 5);
-
-const battleship = new Ship([0, 0], "vert", 4);
-
-export { carrier, battleship };
+export { Ship };
