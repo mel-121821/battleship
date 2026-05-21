@@ -23,11 +23,51 @@ class Gameboard {
         board[i].push(new Square(i, j));
       }
     }
+    return board;
+  }
+
+  checkShipPlacement(shipCoords) {
+    for (let coords of shipCoords) {
+      if (this.board[coords[0]][coords[1]].occupied) {
+        return false; // this square is occupied
+      } else {
+        return true;
+      }
+    }
+  }
+
+  generateShipCoords(coords, dir, type) {
+    const shipCoords = [];
+    if (dir === "hor") {
+      for (let i = 0; i < type; i++) {
+        shipCoords.push([coords[0], coords[1]++]);
+      }
+    } else {
+      for (let i = 0; i < type; i++) {
+        shipCoords.push([coords[0]++, coords[1]]);
+      }
+    }
+    return shipCoords;
   }
 
   placeShip(coords, dir, type) {
-    return new Ship(coords, dir, type);
+    const shipCoords = this.generateShipCoords(coords, dir, type);
+    // check return val of shipCoords
+    if (this.checkShipPlacement(shipCoords)) {
+      this.setBoard(shipCoords);
+      return new Ship(shipCoords);
+    } else {
+      // return false; There is already a ship here
+    }
   }
+
+  setBoard(shipCoords) {
+    for (let coords of shipCoords) {
+      this.board[coords[0]][coords[1]].occupied = true;
+    }
+  }
+
+  recieveAttack(coords) {}
 }
 
 class Square {
@@ -39,5 +79,6 @@ class Square {
 }
 
 const board = new Gameboard();
+// board.placeShip([0, 0], "hor", board.carrier);
 
 export { board };
