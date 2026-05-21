@@ -2,37 +2,38 @@ import { carrier } from "./ship.js";
 import { battleship } from "./ship.js";
 import { board } from "./gameboard.js";
 
-test("Carrier is hit at coord 5", () => {
-  expect(carrier.hit(4)).toBe(true);
+test("generateShipCoords with the args: ([0, 0], 'hor', 4) should return the following coords: [0, 0], [0, 1], [0, 2], [0, 3] ", () => {
+  expect(board.generateShipCoords([0, 0], "hor", 4)).toMatchObject([
+    [0, 0],
+    [0, 1],
+    [0, 2],
+    [0, 3],
+  ]);
 });
 
-test("Carrier is hit but not sunk until after 5 hits", () => {
-  carrier.hit(0);
-  carrier.hit(1);
-  carrier.hit(2);
-  carrier.hit(3);
-  // carrier.hit(4);
-  expect(carrier.isSunk()).toBe(false);
-});
-
-test("Carrier sunk after 5 hits", () => {
-  carrier.hit(0);
-  carrier.hit(1);
-  carrier.hit(2);
-  carrier.hit(3);
-  carrier.hit(4);
-  expect(carrier.isSunk()).toBe(true);
-});
-
-test("Carrier placed at [0, 0] with horizontal direction should show the following coords: [0, 0], [0, 1], [0, 2], [0, 3], [0, 4]", () => {
-  expect(carrier.area[0].coords).toMatchObject([0, 0]);
-  expect(carrier.area[1].coords).toMatchObject([0, 1]);
-  expect(carrier.area[2].coords).toMatchObject([0, 2]);
-  expect(carrier.area[3].coords).toMatchObject([0, 3]);
-  expect(carrier.area[4].coords).toMatchObject([0, 4]);
+test("Carrier placed at [1, 1] with horizontal direction should show the following coords as occupied: [1, 1], [1, 2], [1, 3], [1, 4], [1, 5]", () => {
+  expect(
+    board.placeShip([1, 1], "hor", board.carrier).shipCoords
+  ).toMatchObject([
+    [1, 1],
+    [1, 2],
+    [1, 3],
+    [1, 4],
+    [1, 5],
+  ]);
 });
 
 test("Battleship placed at [0, 0] with vertical direction should show the following coords: [0, 0], [1, 0], [2, 0], [3, 0]", () => {
-  expect(battleship.area[0].coords).toMatchObject([0, 0]);
-  expect(battleship.area[1].coords).toMatchObject([1, 0]);
+  expect(
+    board.placeShip([0, 0], "vert", board.battleship).shipCoords
+  ).toMatchObject([
+    [0, 0],
+    [1, 0],
+    [2, 0],
+    [3, 0],
+  ]);
+});
+
+test("Patrol boat placed at [0, 0] with horizontal direction should return undefined as a boat cannot be placed there. That square is occupied by the battleship", () => {
+  expect(board.placeShip([0, 0], "hor", board.patrolBoat)).toBeUndefined();
 });
