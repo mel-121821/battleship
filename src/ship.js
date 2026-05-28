@@ -7,7 +7,8 @@
 // Patrol Boat: 2
 
 class Ship {
-  constructor(shipCoords) {
+  constructor(shipCoords, name) {
+    this.name = name;
     this.shipCoords = shipCoords;
     this.area = this.buildShip(shipCoords);
     this.hits = 0;
@@ -17,14 +18,22 @@ class Ship {
   buildShip(shipCoords) {
     const area = [];
     for (let coords of shipCoords) {
-      area.push(new Node(coords[0], coords[1]));
+      const shipNode = new Node(coords[0], coords[1]);
+      shipNode.parent = this;
+      area.push(shipNode);
     }
     return area;
   }
 
-  hit(coords) {
+  hit(row, col) {
     this.hits++;
-    return (this.area[coords].isHit = true);
+    const shipArr = this.area;
+    for (let node of shipArr) {
+      if (node.row === row && node.col === col) {
+        node.isHit = true;
+        break;
+      }
+    }
   }
 
   isSunk() {
@@ -36,9 +45,11 @@ class Ship {
 }
 
 class Node {
-  constructor(x, y) {
-    this.coords = [x, y];
+  constructor(row, col) {
+    this.row = row;
+    this.col = col;
     this.isHit = false;
+    this.parent = null;
   }
 }
 
