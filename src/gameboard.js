@@ -2,12 +2,13 @@ import { Ship } from "./ship";
 
 class Gameboard {
   constructor() {
-    // ship types
-    this.carrier = 5;
-    this.battleship = 4;
-    this.destroyer = 3;
-    this.submarine = 3;
-    this.patrolBoat = 2;
+    this.ships = [
+      { name: "carrier", len: 5 },
+      { name: "battleship", len: 4 },
+      { name: "destroyer", len: 3 },
+      { name: "submarine", len: 3 },
+      { name: "patrolBoat", len: 2 },
+    ];
 
     // board
     this.rows = 10;
@@ -26,59 +27,76 @@ class Gameboard {
     return board;
   }
 
-  checkShipPlacement(shipCoords) {
+  shipPlacement_isValid(shipCoords) {
+    let result = true;
     for (let coords of shipCoords) {
-      if (this.board[coords[0]][coords[1]].occupied) {
-        return false; // this square is occupied
-      } else {
-        return true;
+      const x = coords[0];
+      const y = coords[1];
+      if (x > 9 || y > 9 || this.board[x][y].occupyingShipNode !== null) {
+        result = false; // this square is occupied or off board
+        break;
       }
     }
+    return result;
   }
 
-  generateShipCoords(coords, dir, type) {
+  generateShipCoords(row, col, dir, shipLength) {
     const shipCoords = [];
-    if (dir === "hor") {
-      for (let i = 0; i < type; i++) {
-        shipCoords.push([coords[0], coords[1]++]);
+    if (dir === "x-axis") {
+      for (let i = 0; i < shipLength; i++) {
+        shipCoords.push([row, col++]);
       }
     } else {
-      for (let i = 0; i < type; i++) {
-        shipCoords.push([coords[0]++, coords[1]]);
+      for (let i = 0; i < shipLength; i++) {
+        shipCoords.push([row++, col]);
       }
     }
     return shipCoords;
   }
 
-  placeShip(coords, dir, type) {
-    const shipCoords = this.generateShipCoords(coords, dir, type);
-    // check return val of shipCoords
-    if (this.checkShipPlacement(shipCoords)) {
-      this.setBoard(shipCoords);
-      return new Ship(shipCoords);
+  placeShip(row, col, dir, shipType) {
+    const shipCoords = this.generateShipCoords(row, col, dir, shipType.len);
+    if (this.shipPlacement_isValid(shipCoords)) {
+      const ship = new Ship(shipCoords, shipType.name);
+      this.setBoard(ship);
+      return ship;
+    } // else do nothing, can't place ship in occupied space or off board
+  }
+
+  setBoard(ship) {
+    const shipNodes = ship.area; // arr of shipNodes
+    for (const node of shipNodes) {
+      const occupiedSquare = this.board[node.row][node.col];
+      occupiedSquare.occupyingShipNode = node;
+    }
+  }
+
+  receiveAttack(row, col) {
+    const square = this.board[row][col];
+    if (square.recievedAttack) {
+      // throw error, this square has already been hit
     } else {
-      // return false; There is already a ship here
+      square.recievedAttack = true;
+      if (square.occupyingShipNode !== null) {
+        square.occupyingShipNode.parent.hit(row, col);
+        return square.occupyingShipNode.isHit;
+      } else {
+        return square.recievedAttack;
+      }
     }
   }
-
-  setBoard(shipCoords) {
-    for (let coords of shipCoords) {
-      this.board[coords[0]][coords[1]].occupied = true;
-    }
-  }
-
-  recieveAttack(coords) {}
 }
 
 class Square {
-  constructor(x, y) {
-    this.coords = [x, y];
-    this.valid = true;
-    this.occupied = false;
+  constructor(row, col) {
+    this.row = row;
+    this.col = col;
+    this.recievedAttack = false;
+    this.occupyingShipNode = null;
   }
 }
 
 const board = new Gameboard();
-// board.placeShip([0, 0], "hor", board.carrier);
+// board.placeShip([0, 0], "x-axis", board.carrier);
 
 export { board };
