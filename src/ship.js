@@ -1,3 +1,6 @@
+// Imports
+import { pubSub } from "./pubsub.js";
+
 // Ship types and lengths:
 
 // Carrier: 5
@@ -13,6 +16,8 @@ class Ship {
     this.area = this.buildShip(shipCoords);
     this.hits = 0;
     this.sunk = false;
+
+    pubSub.on(`${this.name}isHit`, this.isSunk);
   }
 
   buildShip(shipCoords) {
@@ -31,16 +36,17 @@ class Ship {
     for (let node of shipArr) {
       if (node.row === row && node.col === col) {
         node.isHit = true;
+        pubSub.emit(`${this.name}isHit`, this);
         break;
       }
     }
   }
 
-  isSunk() {
-    if (this.hits > this.len) {
-      this.sunk = true;
+  isSunk(ship) {
+    if (ship.hits === ship.area.length) {
+      ship.sunk = true;
+      pubSub.emit("isSunk");
     }
-    return this.sunk;
   }
 }
 
