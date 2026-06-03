@@ -1,4 +1,5 @@
-import { Ship } from "./ship";
+import { Ship } from "./ship.js";
+import { pubSub } from "./pubsub.js";
 
 class Gameboard {
   constructor() {
@@ -14,6 +15,13 @@ class Gameboard {
     this.rows = 10;
     this.cols = 10;
     this.board = this.createBoard();
+
+    // reporting
+    this.sunkCounter = 0;
+    this.reportSunk_bound = this.reportSunk.bind(this);
+
+    // subs
+    pubSub.on("isSunk", this.reportSunk_bound);
   }
 
   createBoard() {
@@ -30,9 +38,13 @@ class Gameboard {
   shipPlacement_isValid(shipCoords) {
     let result = true;
     for (let coords of shipCoords) {
-      const x = coords[0];
-      const y = coords[1];
-      if (x > 9 || y > 9 || this.board[x][y].occupyingShipNode !== null) {
+      const row = coords[0];
+      const col = coords[1];
+      if (
+        row > 9 ||
+        col > 9 ||
+        this.board[row][col].occupyingShipNode !== null
+      ) {
         result = false; // this square is occupied or off board
         break;
       }
@@ -85,6 +97,15 @@ class Gameboard {
       }
     }
   }
+
+  reportSunk() {
+    this.sunkCounter++;
+    console.log(`${this.sunkCounter} ship(s) sunk`);
+    if (this.sunkCounter === 5) {
+      console.log(`All ships sunk!`);
+    }
+    return this.sunkCounter;
+  }
 }
 
 class Square {
@@ -97,6 +118,44 @@ class Square {
 }
 
 const board = new Gameboard();
+
+// console.log(board);
+
+// Troubleshooting
+// board.placeShip(1, 1, "x-axis", board.ships[0]);
+// board.placeShip(0, 0, "y-axis", board.ships[1]);
+// board.placeShip(4, 4, "x-axis", board.ships[2]);
+// board.placeShip(6, 2, "y-axis", board.ships[3]);
+// board.placeShip(7, 6, "x-axis", board.ships[4]);
+
+// // carrier
+// board.receiveAttack(1, 1);
+// board.receiveAttack(1, 2);
+// board.receiveAttack(1, 3);
+// board.receiveAttack(1, 4);
+// board.receiveAttack(1, 5);
+
+// // battleship
+// board.receiveAttack(0, 0);
+// board.receiveAttack(1, 0);
+// board.receiveAttack(2, 0);
+// board.receiveAttack(3, 0);
+
+// // destroyer
+// board.receiveAttack(4, 4);
+// board.receiveAttack(4, 5);
+// board.receiveAttack(4, 6);
+
+// // sub
+// board.receiveAttack(6, 2);
+// board.receiveAttack(7, 2);
+// board.receiveAttack(8, 2);
+
+// // patrol boat
+// board.receiveAttack(7, 6);
+// board.receiveAttack(7, 7);
+
+// pubSub.on("shipSunk", board.reportAllSunk.count);
 // board.placeShip([0, 0], "x-axis", board.carrier);
 
 export { board };
