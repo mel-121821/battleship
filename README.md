@@ -34,7 +34,7 @@ Note that we have not yet created any User Interface. We should know our code is
 
 **Stage 3:**
 
-- [] Create a Player class/factory.
+- [x] Create a Player class/factory.
 
 There will be two types of players in the game, ‘real’ players and ‘computer’ players.
 
@@ -88,6 +88,9 @@ Make your battleship project more impressive by introducing any of these modific
 
 MDN .bind()
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
+
+Guidelines for git commits (Angular convention):
+https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines
 
 ---
 
