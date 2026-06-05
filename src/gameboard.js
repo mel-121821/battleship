@@ -83,6 +83,66 @@ class Gameboard {
     }
   }
 
+  randomizeShipArgs() {
+    const values = [];
+    const x = Math.floor(Math.random() * 10);
+    const y = Math.floor(Math.random() * 10);
+    const axis = (() => {
+      if (Math.floor(Math.random() * 2) < 1) {
+        return "x-axis";
+      }
+    })();
+    values.push(x, y, axis);
+    return values;
+  }
+
+  placeShips_randomize(ships) {
+    // base case, ships arr == 0
+    if (!ships.length) {
+      return;
+    }
+    // shift first off, assign to var
+    let curr = ships.shift();
+
+    // calculate args
+    let args = this.randomizeShipArgs();
+    console.log(args);
+
+    // call placeship
+    let newShip = this.placeShip(args[0], args[1], args[2], curr);
+    console.log(newShip);
+
+    // while placeship === undefined
+    // call placeShip again
+    while (newShip === undefined) {
+      console.log("illegal placement, recalculating");
+      args = this.randomizeShipArgs();
+      console.log(args);
+      newShip = this.placeShip(args[0], args[1], args[2], curr);
+      console.log(newShip);
+    }
+
+    // exit while loop
+    // call recur with new shifted arr
+    this.placeShips_randomize(ships);
+
+    // loop solution:
+
+    // for (let ship of this.ships) {
+    //   const x = Math.floor(Math.random() * 10)
+    //   const y = Math.floor(Math.random() * 10)
+    //   const axis = (() => {
+    //       if ((Math.floor(Math.random() * 2)) < 1) {
+    //           return "x-axis"
+    //       }
+    //   })()
+    //   let newShip = this.placeShip(x, y, axis, ship.len)
+    //   console.log(newShip)
+    // }
+  }
+
+  placeAllShips() {}
+
   receiveAttack(row, col) {
     const square = this.board[row][col];
     if (square.recievedAttack) {
@@ -157,5 +217,6 @@ const board = new Gameboard();
 
 // pubSub.on("shipSunk", board.reportAllSunk.count);
 // board.placeShip([0, 0], "x-axis", board.carrier);
+board.placeShips_randomize(board.ships);
 
 export { board };
