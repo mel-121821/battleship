@@ -78,9 +78,16 @@ Make your battleship project more impressive by introducing any of these modific
 
 ### Tools:
 
+VS Code keyboard shortcuts:
+https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf
+
 ---
 
 ### Credits:
+
+Background Image:
+Artist: Harry Holder
+URL: https://unsplash.com/photos/beach-during-daytime-NbPJ8HM-w8c
 
 ---
 
