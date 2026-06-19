@@ -1,3 +1,290 @@
+/* __________styles.css__________ */
+
+/*CSS Meyer Reset*/
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+
 body {
-  background-color: rebeccapurple;
+  line-height: 1;
+}
+
+ol,
+ul {
+  list-style: none;
+}
+
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* __________general__________ */
+
+html {
+  font-size: 16px;
+}
+
+.img-wrapper {
+  background-image: url("img/ocean-bg.jpg");
+  background-size: cover;
+}
+
+.body {
+  color: white;
+  display: grid;
+  grid-template-rows: 100px 1fr 50px;
+}
+
+/* __________title__________ */
+
+.header {
+  grid-area: 1/1/2/2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(0, 0, 0, 0.8);
+  font-size: 2.4rem;
+}
+
+/* __________main__________ */
+
+.main {
+  grid-area: 2/1/3/2;
+  height: calc(100vh - 150px);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+}
+
+/* __________boards__________ */
+
+.column {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 70px 1fr 70px;
+}
+
+.p1 {
+  grid-area: 1/1/2/2;
+}
+
+.p2 {
+  grid-area: 1/2/2/3;
+}
+
+.name {
+  grid-area: 1/1/2/2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(0, 0, 0, 0.3);
+  font-size: 1.7rem;
+}
+
+.board-wrapper {
+  grid-area: 2/1/3/2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0px 35px;
+}
+
+.ship-select {
+  width: 190px;
+  height: 390px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-evenly;
+  background-color: rgb(0, 0, 0, 0.5);
+  border-radius: 10px;
+}
+
+.ship {
+  height: 36px;
+  background-color: cadetblue;
+}
+
+.carrier {
+  width: 190px;
+  border-radius: 40%;
+}
+
+.battleship {
+  width: 152px;
+  border-radius: 45%;
+}
+
+.destroyer,
+.submarine {
+  width: 114px;
+  border-radius: 55%;
+}
+
+.patrol-boat {
+  width: 76px;
+  border-radius: 70%;
+}
+
+.board {
+  height: 380px;
+  width: 380px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+}
+
+.square {
+  background-color: rgb(255, 255, 255, 0.65);
+  border-radius: 3px;
+  border: 1px solid cadetblue;
+}
+
+.ship-data {
+  background-color: rgb(0, 0, 0, 0.65);
+}
+
+.footer {
+  grid-area: 3/1/4/2;
+  background-color: black;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer .text {
+  color: white;
+}
+
+.icon img {
+  margin-bottom: -7px;
+  margin-left: 10px;
+  height: 40px;
+  width: 40px;
+}
+
+.icon img:hover {
+  -webkit-transform: scale(1.1);
+  -ms-transform: scale(1.1);
+  transform: scale(1.1);
+  transition: 0.3s ease;
 }
