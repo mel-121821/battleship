@@ -3,16 +3,23 @@ import { dom } from "./domHandler.js";
 
 class Driver {
   constructor() {
-    this.p1 = new Player("Player 1");
-    this.p2 = new Player("Computer");
+    this.p1 = new Player("Player 1", "p1");
+    this.p2 = new Player("Computer", "p2");
     this.active = this.p1;
   }
 
   initGame() {
     // clear all data
     // update boards
-    dom.initBoardUI(this.p1.data.board, this.p2.data.board);
+    dom.initBoardUI(this.p1, this.p2);
     // get players
+  }
+
+  initSetShips() {
+    this.p1.data.placeShips_randomize(this.p1.data.ships);
+    this.p2.data.placeShips_randomize(this.p2.data.ships);
+    dom.updateBoard_ShipsPlaced(this.p1);
+    dom.updateBoard_ShipsPlaced(this.p2);
   }
 }
 
