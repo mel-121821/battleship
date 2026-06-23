@@ -4,15 +4,19 @@ class DomHandler {
     this.p2_DOMBoard = document.querySelector(".p2 .board");
   }
 
-  generateBoard(board, element) {
-    console.log(board);
+  generateBoard(player, DOMBoard) {
+    // generates an empty board, ships placed later
+    const board = player.data.board;
     board.forEach((row) => {
-      row.forEach((square, index) => {
+      row.forEach((square) => {
         const squareBtn = document.createElement("button");
         squareBtn.classList.add("square");
-        squareBtn.dataset.row = board.indexOf(row);
-        squareBtn.dataset.col = index;
-        element.appendChild(squareBtn);
+        squareBtn.classList.add(`row_${square.row}`);
+        squareBtn.classList.add(`col_${square.col}`);
+        DOMBoard.appendChild(squareBtn);
+        squareBtn.addEventListener("click", () => {
+          player.data.receiveAttack(square.row, square.col);
+        });
       });
     });
   }
@@ -21,6 +25,23 @@ class DomHandler {
     this.generateBoard(board1, this.p1_DOMBoard);
     this.generateBoard(board2, this.p2_DOMBoard);
   }
+
+  updateBoard_ShipsPlaced(player) {
+    const playerDom = document.querySelector(`.${player.type}`);
+    const board = player.data.board;
+    board.forEach((row) => {
+      row.forEach((square) => {
+        if (square.occupyingShipNode !== null) {
+          const domSquare = playerDom.querySelector(
+            `.row_${square.row}.col_${square.col}`
+          );
+          domSquare.classList.add("occupied");
+        }
+      });
+    });
+  }
+
+  updateBoard_ReceivedAttack() {}
 }
 
 const dom = new DomHandler();
