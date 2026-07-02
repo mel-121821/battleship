@@ -1,10 +1,10 @@
 import { Gameboard } from "./gameboard.js";
 
 class Player {
-  constructor(name, type) {
+  constructor(name, pCode) {
     this.name = name;
-    this.type = type;
-    this.data = new Gameboard();
+    this.pCode = pCode;
+    this.data = new Gameboard(pCode);
   }
 }
 
