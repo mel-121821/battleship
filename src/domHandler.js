@@ -55,6 +55,17 @@ class DomHandler {
     } else {
       attackedSquare.classList.add("receivedAttack");
     }
+    pubSub.emit("turnComplete", square);
+  }
+
+  pointerEventsOff(pCode) {
+    const playerBoard = document.querySelector(`.${pCode}`);
+    playerBoard.style.pointerEvents = "none";
+  }
+
+  pointerEventsOn(pCode) {
+    const playerBoard = document.querySelector(`.${pCode}`);
+    playerBoard.style.pointerEvents = "auto";
   }
 }
 
