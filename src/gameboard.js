@@ -2,7 +2,8 @@ import { Ship } from "./ship.js";
 import { pubSub } from "./pubsub.js";
 
 class Gameboard {
-  constructor() {
+  constructor(pCode) {
+    this.pCode = pCode;
     this.ships = [
       { name: "carrier", len: 5 },
       { name: "battleship", len: 4 },
@@ -29,7 +30,7 @@ class Gameboard {
     for (let i = 0; i < this.rows; i++) {
       board[i] = [];
       for (let j = 0; j < this.cols; j++) {
-        board[i].push(new Square(i, j));
+        board[i].push(new Square(i, j, this.pCode));
       }
     }
     return board;
@@ -113,15 +114,17 @@ class Gameboard {
   receiveAttack(row, col) {
     const square = this.board[row][col];
     if (square.recievedAttack) {
-      // throw error, this square has already been hit
+      // pubsub error, this square has already been hit
     } else {
       square.recievedAttack = true;
       if (square.occupyingShipNode !== null) {
         square.occupyingShipNode.parent.hit(row, col);
-        return square.occupyingShipNode.isHit;
+        square.occupyingShipNode.isHit;
       } else {
-        return square.recievedAttack;
+        square.recievedAttack;
       }
+      console.log(`square ${square.row} ${square.col} received an attack!`);
+      pubSub.emit("receivedAttack", square);
     }
   }
 
@@ -136,15 +139,14 @@ class Gameboard {
 }
 
 class Square {
-  constructor(row, col) {
+  constructor(row, col, pCode) {
+    this.pCode = pCode;
     this.row = row;
     this.col = col;
     this.recievedAttack = false;
     this.occupyingShipNode = null;
   }
 }
-
-const board = new Gameboard();
 
 // console.log(board);
 
@@ -186,4 +188,4 @@ const board = new Gameboard();
 // board.placeShip([0, 0], "x-axis", board.carrier);
 // board.placeShips_randomize(board.ships);
 
-export { board };
+export { Gameboard };
