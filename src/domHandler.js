@@ -1,7 +1,11 @@
+import { pubSub } from "./pubsub.js";
+
 class DomHandler {
   constructor() {
     this.p1_DOMBoard = document.querySelector(".p1 .board");
     this.p2_DOMBoard = document.querySelector(".p2 .board");
+
+    pubSub.on("receivedAttack", this.updateBoard_ReceivedAttack);
   }
 
   generateBoard(player, DOMBoard) {
@@ -27,7 +31,7 @@ class DomHandler {
   }
 
   updateBoard_ShipsPlaced(player) {
-    const playerDom = document.querySelector(`.${player.type}`);
+    const playerDom = document.querySelector(`.${player.pCode}`);
     const board = player.data.board;
     board.forEach((row) => {
       row.forEach((square) => {
@@ -41,7 +45,17 @@ class DomHandler {
     });
   }
 
-  updateBoard_ReceivedAttack() {}
+  updateBoard_ReceivedAttack(square) {
+    console.log(square);
+    const attackedSquare = document.querySelector(
+      `.${square.pCode} .row_${square.row}.col_${square.col}`
+    );
+    if (square.occupyingShipNode !== null) {
+      attackedSquare.classList.add("hit");
+    } else {
+      attackedSquare.classList.add("receivedAttack");
+    }
+  }
 }
 
 const dom = new DomHandler();
