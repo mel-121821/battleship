@@ -22,7 +22,7 @@ class Gameboard {
     this.reportSunk_bound = this.reportSunk.bind(this);
 
     // subs
-    pubSub.on("isSunk", this.reportSunk_bound);
+    pubSub.on(`${this.pCode}shipIsSunk`, this.reportSunk_bound);
   }
 
   createBoard() {
@@ -70,7 +70,7 @@ class Gameboard {
   placeShip(row, col, dir, shipType) {
     const shipCoords = this.generateShipCoords(row, col, dir, shipType.len);
     if (this.shipPlacement_isValid(shipCoords)) {
-      const ship = new Ship(shipCoords, shipType.name);
+      const ship = new Ship(shipCoords, shipType.name, this.pCode);
       this.setBoard(ship);
       return ship;
     } // else do nothing, can't place ship in occupied space or off board
@@ -132,6 +132,8 @@ class Gameboard {
 
   reportSunk() {
     this.sunkCounter++;
+    console.log("reportSunk called");
+    console.log(this);
     console.log(`${this.sunkCounter} ship(s) sunk`);
     if (this.sunkCounter === 5) {
       console.log(`All ships sunk!`);
