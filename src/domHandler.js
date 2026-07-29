@@ -45,6 +45,11 @@ class DomHandler {
     });
   }
 
+  initP1() {
+    this.p1_DOMBoard.style.pointerEvents = "none";
+    console.log("p1 is active");
+  }
+
   updateBoard_ReceivedAttack(square) {
     console.log(square);
     const attackedSquare = document.querySelector(
@@ -55,17 +60,17 @@ class DomHandler {
     } else {
       attackedSquare.classList.add("receivedAttack");
     }
-    pubSub.emit("turnComplete", square);
+    pubSub.emit("turnComplete", square.pCode);
   }
 
-  pointerEventsOff(pCode) {
-    const playerBoard = document.querySelector(`.${pCode}`);
-    playerBoard.style.pointerEvents = "none";
-  }
-
-  pointerEventsOn(pCode) {
-    const playerBoard = document.querySelector(`.${pCode}`);
-    playerBoard.style.pointerEvents = "auto";
+  switchActiveBoard(pCode) {
+    if (pCode === "p1") {
+      this.p1_DOMBoard.style.pointerEvents = "none";
+      this.p2_DOMBoard.style.pointerEvents = "auto";
+    } else {
+      this.p1_DOMBoard.style.pointerEvents = "auto";
+      this.p2_DOMBoard.style.pointerEvents = "none";
+    }
   }
 }
 
