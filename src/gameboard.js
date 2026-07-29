@@ -128,8 +128,6 @@ class Gameboard {
     }
   }
 
-  // TODO: Bug found: reportSunk ships are being double counted
-
   reportSunk() {
     this.sunkCounter++;
     console.log("reportSunk called");
