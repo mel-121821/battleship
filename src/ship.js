@@ -44,8 +44,6 @@ class Ship {
     }
   }
 
-  // BUG Found: the pubSub.emit "isSunk" is being listened to by both boards
-
   isSunk(ship) {
     if (ship.hits === ship.area.length) {
       ship.sunk = true;
