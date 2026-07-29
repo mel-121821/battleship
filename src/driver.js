@@ -6,8 +6,7 @@ class Driver {
   constructor() {
     this.p1 = new Player("Player 1", "p1");
     this.p2 = new Player("Computer", "p2");
-    this.active = this.p1;
-    this.inactive = this.p2;
+    this.active = this.p1.pCode;
 
     this.switchActivePlayer_bound = this.switchActivePlayer.bind(this);
 
@@ -18,6 +17,8 @@ class Driver {
     // clear all data
     // update boards
     dom.initBoardUI(this.p1, this.p2);
+    this.initSetShips();
+    dom.initP1();
     // get players
   }
 
@@ -29,16 +30,9 @@ class Driver {
   }
 
   switchActivePlayer() {
-    if (this.active === this.p1) {
-      this.active = this.p2;
-      this.inactive = this.p1;
-    } else {
-      this.active = this.p1;
-      this.inactive = this.p2;
-    }
-    dom.pointerEventsOn(this.active.pCode);
-    dom.pointerEventsOff(this.inactive.pCode);
-    console.log(`${this.active.pCode} is active`);
+    this.active = this.active === "p1" ? "p2" : "p1";
+    dom.switchActiveBoard(this.active);
+    console.log(`${this.active} is active`);
   }
 }
 
