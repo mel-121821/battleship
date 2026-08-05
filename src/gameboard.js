@@ -2,7 +2,8 @@ import { Ship } from "./ship.js";
 import { pubSub } from "./pubsub.js";
 
 class Gameboard {
-  constructor(pCode) {
+  constructor(playerName, pCode) {
+    this.playerName = playerName;
     this.pCode = pCode;
     this.ships = [
       { name: "carrier", len: 5 },
@@ -70,7 +71,12 @@ class Gameboard {
   placeShip(row, col, dir, shipType) {
     const shipCoords = this.generateShipCoords(row, col, dir, shipType.len);
     if (this.shipPlacement_isValid(shipCoords)) {
-      const ship = new Ship(shipCoords, shipType.name, this.pCode);
+      const ship = new Ship(
+        shipCoords,
+        shipType.name,
+        this.playerName,
+        this.pCode
+      );
       this.setBoard(ship);
       return ship;
     } // else do nothing, can't place ship in occupied space or off board
@@ -122,8 +128,9 @@ class Gameboard {
         square.occupyingShipNode.isHit;
       } else {
         square.recievedAttack;
+        console.log(`attacked square ${square.row} ${square.col}`);
+        console.log("missed!");
       }
-      console.log(`square ${square.row} ${square.col} received an attack!`);
       pubSub.emit("receivedAttack", square);
     }
   }
@@ -134,7 +141,7 @@ class Gameboard {
     console.log(this);
     console.log(`${this.sunkCounter} ship(s) sunk`);
     if (this.sunkCounter === 5) {
-      console.log(`All ships sunk!`);
+      pubSub.emit("endGame", this.pCode);
     }
     return this.sunkCounter;
   }
