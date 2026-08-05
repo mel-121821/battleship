@@ -2,10 +2,39 @@ import { pubSub } from "./pubsub.js";
 
 class DomHandler {
   constructor() {
-    this.p1_DOMBoard = document.querySelector(".p1 .board");
-    this.p2_DOMBoard = document.querySelector(".p2 .board");
+    // Modals
+    this.startModal = document.querySelector("dialog");
+    this.startModal_Submit = document.querySelector(".start form");
+    this.startModal_P1 = document.querySelector("#p1");
+    this.startModal_P2 = document.querySelector("#p2");
+
+    // Boards
+    this.p1_DOMBoard = null;
+    this.p2_DOMBoard = null;
 
     pubSub.on("receivedAttack", this.updateBoard_ReceivedAttack);
+
+    // Event listeners
+    this.startModal_Submit.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const players = [];
+      players.push(this.startModal_P1.value);
+      players.push(this.startModal_P2.value);
+      console.log(players);
+      this.closeModal(e);
+      pubSub.emit("gotInfo", players);
+    });
+  }
+
+  showStartModal() {
+    this.startModal.showModal();
+  }
+
+  closeModal(e) {
+    const parentForm = e.target.closest("form");
+    const parentModal = e.target.closest("dialog");
+    parentForm.reset();
+    parentModal.close();
   }
 
   generateBoard(player, DOMBoard) {
@@ -25,9 +54,11 @@ class DomHandler {
     });
   }
 
-  initBoardUI(board1, board2) {
-    this.generateBoard(board1, this.p1_DOMBoard);
-    this.generateBoard(board2, this.p2_DOMBoard);
+  initBoardUI(player1, player2) {
+    this.p1_DOMBoard = document.querySelector(".p1 .board");
+    this.p2_DOMBoard = document.querySelector(".p2 .board");
+    this.generateBoard(player1, this.p1_DOMBoard);
+    this.generateBoard(player2, this.p2_DOMBoard);
   }
 
   updateBoard_ShipsPlaced(player) {
@@ -45,9 +76,9 @@ class DomHandler {
     });
   }
 
-  initP1() {
+  initP1(activePlayer) {
     this.p1_DOMBoard.style.pointerEvents = "none";
-    console.log("p1 is active");
+    console.log(`${activePlayer} is active`);
   }
 
   updateBoard_ReceivedAttack(square) {
@@ -72,6 +103,13 @@ class DomHandler {
       this.p2_DOMBoard.style.pointerEvents = "none";
     }
   }
+
+  disableBoards() {
+    this.p1_DOMBoard.style.pointerEvents = "none";
+    this.p2_DOMBoard.style.pointerEvents = "none";
+  }
+
+  declareWinner() {}
 }
 
 const dom = new DomHandler();
