@@ -4,35 +4,57 @@ import { pubSub } from "./pubsub.js";
 
 class Driver {
   constructor() {
-    this.p1 = new Player("Player 1", "p1");
-    this.p2 = new Player("Computer", "p2");
-    this.active = this.p1.pCode;
+    this.p1 = null;
+    this.p2 = null;
+    this.active = null;
 
     this.switchActivePlayer_bound = this.switchActivePlayer.bind(this);
+    this.initGame_bound = this.initGame.bind(this);
 
+    pubSub.on("gotInfo", this.initGame_bound);
     pubSub.on("turnComplete", this.switchActivePlayer_bound);
+    pubSub.on("endGame");
   }
 
-  initGame() {
+  getPlayers() {
+    dom.showStartModal();
+  }
+
+  initGame(playerArr) {
     // clear all data
+    this.p1 = new Player(playerArr[0], "p1");
+    this.p2 = new Player(playerArr[1], "p2");
+    this.active = this.p1;
+
     // update boards
     dom.initBoardUI(this.p1, this.p2);
     this.initSetShips();
-    dom.initP1();
+    dom.initP1(this.active.name);
     // get players
   }
 
   initSetShips() {
     this.p1.data.placeShips_randomize(this.p1.data.ships);
     this.p2.data.placeShips_randomize(this.p2.data.ships);
+
+    // TODO: turn this into a pubsub from the gameboard
     dom.updateBoard_ShipsPlaced(this.p1);
     dom.updateBoard_ShipsPlaced(this.p2);
   }
 
   switchActivePlayer() {
-    this.active = this.active === "p1" ? "p2" : "p1";
-    dom.switchActiveBoard(this.active);
-    console.log(`${this.active} is active`);
+    if (this.active.pCode === "p1") {
+      this.active = this.p2;
+    } else {
+      this.active = this.p1;
+    }
+    dom.switchActiveBoard(this.active.pCode);
+    console.log(`${this.active.name} is active`);
+  }
+
+  endGame() {
+    // call dom.disableBoardEvents()
+    // call dom.declareWinner()
   }
 }
 
