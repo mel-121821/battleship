@@ -1,28 +1,25 @@
 import { pubSub } from "./pubsub.js";
 
 class DomHandler {
+  // Modals
+  startModal = document.querySelector("dialog");
+  startModal_Submit = document.querySelector(".start form");
+
+  // Boards
+  p1_DOMBoard = document.querySelector(".p1 .board");
+  p2_DOMBoard = document.querySelector(".p2 .board");
+
+  // Event listeners
+
   constructor() {
-    // Modals
-    this.startModal = document.querySelector("dialog");
-    this.startModal_Submit = document.querySelector(".start form");
-    this.startModal_P1 = document.querySelector("#p1");
-    this.startModal_P2 = document.querySelector("#p2");
-
-    // Boards
-    this.p1_DOMBoard = null;
-    this.p2_DOMBoard = null;
-
     pubSub.on("receivedAttack", this.updateBoard_ReceivedAttack);
+    pubSub.on("shipsPlaced", this.updateBoard_ShipsPlaced);
 
-    // Event listeners
     this.startModal_Submit.addEventListener("submit", (e) => {
       e.preventDefault();
-      const players = [];
-      players.push(this.startModal_P1.value);
-      players.push(this.startModal_P2.value);
-      console.log(players);
+      const formData = Object.fromEntries(new FormData(this.startModal_Submit));
       this.closeModal(e);
-      pubSub.emit("gotInfo", players);
+      pubSub.emit("gotInfo", formData);
     });
   }
 
@@ -55,8 +52,6 @@ class DomHandler {
   }
 
   initBoardUI(player1, player2) {
-    this.p1_DOMBoard = document.querySelector(".p1 .board");
-    this.p2_DOMBoard = document.querySelector(".p2 .board");
     this.generateBoard(player1, this.p1_DOMBoard);
     this.generateBoard(player2, this.p2_DOMBoard);
   }
