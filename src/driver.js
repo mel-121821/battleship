@@ -1,16 +1,18 @@
-import { Player } from "./player.js";
+import { Player, Computer } from "./player.js";
 import { dom } from "./domHandler.js";
 import { pubSub } from "./pubsub.js";
 
 class Driver {
-  constructor() {
-    this.p1 = null;
-    this.p2 = null;
-    this.active = null;
+  p1 = null;
+  p2 = null;
+  active = null;
 
+  constructor() {
+    // bound methods
     this.switchActivePlayer_bound = this.switchActivePlayer.bind(this);
     this.initGame_bound = this.initGame.bind(this);
 
+    // pubsubs
     pubSub.on("gotInfo", this.initGame_bound);
     pubSub.on("turnComplete", this.switchActivePlayer_bound);
     pubSub.on("endGame");
@@ -20,12 +22,25 @@ class Driver {
     dom.showStartModal();
   }
 
-  initGame(playerArr) {
-    // clear all data
-    this.p1 = new Player(playerArr[0], "p1");
-    this.p2 = new Player(playerArr[1], "p2");
-    this.active = this.p1;
+  initPlayers(playerList) {
+    if (playerList["p1-type"] === "human") {
+      this.p1 = new Player(playerList["p1-name"], "p1");
+    } else {
+      this.p1 = new Computer("p1");
+    }
+    if (playerList["p2-type"] === "human") {
+      this.p2 = new Player(playerList["p2-name"], "p2");
+    } else {
+      this.p2 = new Computer("p2");
+    }
+    console.log(this.p1);
+    console.log(this.p2);
+  }
 
+  initGame(playerList) {
+    // clear all data
+    this.initPlayers(playerList);
+    this.active = this.p1;
     // update boards
     dom.initBoardUI(this.p1, this.p2);
     this.initSetShips();
@@ -38,8 +53,8 @@ class Driver {
     this.p2.data.placeShips_randomize(this.p2.data.ships);
 
     // TODO: turn this into a pubsub from the gameboard
-    dom.updateBoard_ShipsPlaced(this.p1);
-    dom.updateBoard_ShipsPlaced(this.p2);
+    // dom.updateBoard_ShipsPlaced(this.p1);
+    // dom.updateBoard_ShipsPlaced(this.p2);
   }
 
   switchActivePlayer() {
