@@ -2,9 +2,10 @@ import { Ship } from "./ship.js";
 import { pubSub } from "./pubsub.js";
 
 class Gameboard {
-  constructor(playerName, pCode) {
-    this.playerName = playerName;
-    this.pCode = pCode;
+  constructor(parent) {
+    // this.playerName = playerName;
+    // this.pCode = pCode;
+    this.parent = parent;
     this.ships = [
       { name: "carrier", len: 5 },
       { name: "battleship", len: 4 },
@@ -23,7 +24,7 @@ class Gameboard {
     this.reportSunk_bound = this.reportSunk.bind(this);
 
     // subs
-    pubSub.on(`${this.pCode}shipIsSunk`, this.reportSunk_bound);
+    pubSub.on(`${this.parent.pCode}shipIsSunk`, this.reportSunk_bound);
   }
 
   createBoard() {
@@ -31,7 +32,7 @@ class Gameboard {
     for (let i = 0; i < this.rows; i++) {
       board[i] = [];
       for (let j = 0; j < this.cols; j++) {
-        board[i].push(new Square(i, j, this.pCode));
+        board[i].push(new Square(i, j, this.parent.pCode));
       }
     }
     return board;
@@ -74,8 +75,8 @@ class Gameboard {
       const ship = new Ship(
         shipCoords,
         shipType.name,
-        this.playerName,
-        this.pCode
+        this.parent.name,
+        this.parent.pCode
       );
       this.setBoard(ship);
       return ship;
@@ -105,6 +106,7 @@ class Gameboard {
 
   placeShips_randomize(ships) {
     if (!ships.length) {
+      pubSub.emit("shipsPlaced", this.parent);
       return;
     }
     let curr = ships.shift();
@@ -141,7 +143,7 @@ class Gameboard {
     console.log(this);
     console.log(`${this.sunkCounter} ship(s) sunk`);
     if (this.sunkCounter === 5) {
-      pubSub.emit("endGame", this.pCode);
+      pubSub.emit("endGame", this.parent.pCode);
     }
     return this.sunkCounter;
   }
