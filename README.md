@@ -104,6 +104,11 @@ https://stackoverflow.com/questions/18083061/make-element-unclickable-click-thin
 
 https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/pointer-events#Values
 
+Getting HTML form values (FormData):
+https://stackoverflow.com/questions/3547035/getting-html-form-values
+
+https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData
+
 ---
 
 ### Bugs and Fixes:
