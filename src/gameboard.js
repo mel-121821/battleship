@@ -3,8 +3,6 @@ import { pubSub } from "./pubsub.js";
 
 class Gameboard {
   constructor(parent) {
-    // this.playerName = playerName;
-    // this.pCode = pCode;
     this.parent = parent;
     this.ships = [
       { name: "carrier", len: 5 },
@@ -122,12 +120,14 @@ class Gameboard {
   receiveAttack(row, col) {
     const square = this.board[row][col];
     if (square.recievedAttack) {
-      // pubsub error, this square has already been hit
+      pubSub.emit("newTurn", console.log("this square has already been hit"));
     } else {
       square.recievedAttack = true;
       if (square.occupyingShipNode !== null) {
         square.occupyingShipNode.parent.hit(row, col);
-        square.occupyingShipNode.isHit;
+        // TODO: check the following functionality if on the shipNode already, double check and remove this line when finished
+        console.log(square.occupyingShipNode);
+        // square.occupyingShipNode.isHit;
       } else {
         square.recievedAttack;
         console.log(`attacked square ${square.row} ${square.col}`);
