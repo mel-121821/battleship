@@ -11,10 +11,12 @@ class Driver {
     // bound methods
     this.switchActivePlayer_bound = this.switchActivePlayer.bind(this);
     this.initGame_bound = this.initGame.bind(this);
+    this.initComputerTurn_bound = this.initComputerTurn.bind(this);
 
     // pubsubs
     pubSub.on("gotInfo", this.initGame_bound);
     pubSub.on("turnComplete", this.switchActivePlayer_bound);
+    pubSub.on("newTurn", this.initComputerTurn_bound);
     pubSub.on("endGame");
   }
 
@@ -24,37 +26,39 @@ class Driver {
 
   initPlayers(playerList) {
     if (playerList["p1-type"] === "human") {
-      this.p1 = new Player(playerList["p1-name"], "p1");
+      this.p1 = new Player("p1", playerList["p1-name"]);
     } else {
       this.p1 = new Computer("p1");
     }
     if (playerList["p2-type"] === "human") {
-      this.p2 = new Player(playerList["p2-name"], "p2");
+      this.p2 = new Player("p2", playerList["p2-name"]);
     } else {
       this.p2 = new Computer("p2");
     }
-    console.log(this.p1);
-    console.log(this.p2);
+  }
+
+  setOpponents() {
+    if (this.p1.type === "computer") {
+      this.p1.setOpponent(this.p2.data);
+    }
+    if (this.p2.type === "computer") {
+      this.p2.setOpponent(this.p1.data);
+    }
   }
 
   initGame(playerList) {
-    // clear all data
     this.initPlayers(playerList);
+    this.setOpponents();
     this.active = this.p1;
-    // update boards
     dom.initBoardUI(this.p1, this.p2);
     this.initSetShips();
     dom.initP1(this.active.name);
-    // get players
+    pubSub.emit("newTurn", console.log("New turn"));
   }
 
   initSetShips() {
     this.p1.data.placeShips_randomize(this.p1.data.ships);
     this.p2.data.placeShips_randomize(this.p2.data.ships);
-
-    // TODO: turn this into a pubsub from the gameboard
-    // dom.updateBoard_ShipsPlaced(this.p1);
-    // dom.updateBoard_ShipsPlaced(this.p2);
   }
 
   switchActivePlayer() {
@@ -65,6 +69,17 @@ class Driver {
     }
     dom.switchActiveBoard(this.active.pCode);
     console.log(`${this.active.name} is active`);
+    pubSub.emit("newTurn", console.log("New turn"));
+  }
+
+  initComputerTurn() {
+    if (this.active.type === "computer") {
+      // remove pointer events on comp target to prevent player from clicking board
+      dom.disableBoards();
+      setTimeout(() => {
+        this.active.attackOpponent_bound();
+      }, 2000);
+    }
   }
 
   endGame() {
