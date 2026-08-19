@@ -9,15 +9,40 @@ class Driver {
 
   constructor() {
     // bound methods
-    this.switchActivePlayer_bound = this.switchActivePlayer.bind(this);
+    this.newGame_bound = this.newGame.bind(this);
     this.initGame_bound = this.initGame.bind(this);
+    this.switchActivePlayer_bound = this.switchActivePlayer.bind(this);
     this.initComputerTurn_bound = this.initComputerTurn.bind(this);
+    this.endGame_bound = this.endGame.bind(this);
 
     // pubsubs
     pubSub.on("gotInfo", this.initGame_bound);
     pubSub.on("turnComplete", this.switchActivePlayer_bound);
     pubSub.on("newTurn", this.initComputerTurn_bound);
-    pubSub.on("endGame");
+    pubSub.on("endGame", this.endGame_bound);
+    pubSub.on("newGame", this.newGame_bound);
+  }
+
+  newGame() {
+    this.clearGameData();
+    dom.clearBoard();
+    dom.closeEndGameModal();
+    console.log(pubSub.events);
+    this.clearSubs();
+    pubSub.on("turnComplete", this.switchActivePlayer_bound);
+    this.getPlayers();
+  }
+
+  clearSubs() {
+    // use object.keys
+    const keys = Object.keys(pubSub.events);
+    for (const key of keys) {
+      if (key.charAt(0) === "p") {
+        console.log(key);
+        pubSub.events[key] = [];
+      }
+    }
+    console.log(pubSub.events);
   }
 
   getPlayers() {
@@ -53,6 +78,9 @@ class Driver {
     dom.initBoardUI(this.p1, this.p2);
     this.initSetShips();
     dom.initP1(this.active.name);
+    console.log(this.p1);
+    console.log(this.p2);
+    console.log(pubSub);
     pubSub.emit("newTurn", console.log("New turn"));
   }
 
@@ -74,17 +102,23 @@ class Driver {
 
   initComputerTurn() {
     if (this.active.type === "computer") {
-      // remove pointer events on comp target to prevent player from clicking board
       dom.disableBoards();
       setTimeout(() => {
         this.active.attackOpponent_bound();
-      }, 2000);
+      }, 500);
     }
   }
 
+  clearGameData() {
+    this.p1 = null;
+    this.p2 = null;
+    this.active = null;
+  }
+
   endGame() {
-    // call dom.disableBoardEvents()
-    // call dom.declareWinner()
+    pubSub.off("turnComplete", this.switchActivePlayer_bound);
+    dom.disableBoards();
+    dom.declareWinner(this.active.name);
   }
 }
 
