@@ -23,24 +23,13 @@ class Computer extends Player {
   setOpponent(board) {
     console.log(board);
     this.opponent = board;
-    console.log(this.opponent);
-  }
-
-  generateAttackCoords() {
-    return [x, y];
   }
 
   attackOpponent() {
-    // const coords = this.generateAttackCoords();
     const x = Math.floor(Math.random() * 10);
     const y = Math.floor(Math.random() * 10);
-    console.log(this.opponent);
     this.opponent.receiveAttack(x, y);
   }
-
-  // attackOpponent_Delayed() {
-  //   setTimeout(this.attackOpponent, 1000);
-  // }
 
   proximityAttack() {}
 }
