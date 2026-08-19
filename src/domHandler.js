@@ -4,23 +4,37 @@ class DomHandler {
   // Modals
   startModal = document.querySelector("dialog");
   startModal_Submit = document.querySelector(".start form");
+  endGameModal = document.querySelector(".end-game");
+  endGameModal_Winner = document.querySelector(".end-game span");
+  endGameModal_Close = document.querySelector(".close");
+  endGameModal_PlayAgain = document.querySelector(".replay");
 
   // Boards
   p1_DOMBoard = document.querySelector(".p1 .board");
   p2_DOMBoard = document.querySelector(".p2 .board");
 
-  // Event listeners
-
   constructor() {
-    pubSub.on("receivedAttack", this.updateBoard_ReceivedAttack);
-    pubSub.on("shipsPlaced", this.updateBoard_ShipsPlaced);
-
+    // Event listeners
     this.startModal_Submit.addEventListener("submit", (e) => {
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(this.startModal_Submit));
       this.closeModal(e);
       pubSub.emit("gotInfo", formData);
     });
+
+    this.endGameModal_Close.addEventListener("click", (e) => {
+      e.preventDefault();
+      this.closeModal(e);
+    });
+
+    this.endGameModal_PlayAgain.addEventListener("click", (e) => {
+      e.preventDefault();
+      pubSub.emit("newGame", console.log("New game"));
+    });
+
+    // Pubsubs
+    pubSub.on("receivedAttack", this.updateBoard_ReceivedAttack);
+    pubSub.on("shipsPlaced", this.updateBoard_ShipsPlaced);
   }
 
   showStartModal() {
@@ -30,8 +44,14 @@ class DomHandler {
   closeModal(e) {
     const parentForm = e.target.closest("form");
     const parentModal = e.target.closest("dialog");
-    parentForm.reset();
+    if (parentForm !== null) {
+      parentForm.reset();
+    }
     parentModal.close();
+  }
+
+  closeEndGameModal() {
+    this.endGameModal.close();
   }
 
   generateBoard(player, DOMBoard) {
@@ -73,11 +93,11 @@ class DomHandler {
 
   initP1(activePlayer) {
     this.p1_DOMBoard.style.pointerEvents = "none";
+    this.p2_DOMBoard.style.pointerEvents = "auto";
     console.log(`${activePlayer} is active`);
   }
 
   updateBoard_ReceivedAttack(square) {
-    console.log(square);
     const attackedSquare = document.querySelector(
       `.${square.pCode} .row_${square.row}.col_${square.col}`
     );
@@ -104,7 +124,16 @@ class DomHandler {
     this.p2_DOMBoard.style.pointerEvents = "none";
   }
 
-  declareWinner() {}
+  clearBoard() {
+    this.p1_DOMBoard.innerHTML = "";
+    this.p2_DOMBoard.innerHTML = "";
+  }
+
+  declareWinner(playerName) {
+    console.log(`${playerName} wins!`);
+    this.endGameModal.showModal();
+    this.endGameModal_Winner.textContent = playerName;
+  }
 }
 
 const dom = new DomHandler();
