@@ -4,10 +4,29 @@ class DomHandler {
   // Modals
   startModal = document.querySelector("dialog");
   startModal_Submit = document.querySelector(".start form");
+
   endGameModal = document.querySelector(".end-game");
   endGameModal_Winner = document.querySelector(".end-game span");
   endGameModal_Close = document.querySelector(".close");
   endGameModal_PlayAgain = document.querySelector(".replay");
+
+  p1ShipSelectModal = document.querySelector(".p1-ships-dialog");
+  p1ShipSelectModal_span = document.querySelector(".p1-ships-dialog span");
+  p1ShipSelectModal_PickOwnShips_Btn = document.querySelector(
+    ".p1-ships-dialog .pick"
+  );
+  p1ShipSelectModal_Randomize = document.querySelector(
+    ".p1-ships-dialog .randomize"
+  );
+
+  p2ShipSelectModal = document.querySelector(".p2-ships-dialog");
+  p2ShipSelectModal_span = document.querySelector(".p2-ships-dialog span");
+  p2ShipSelectModal_PickOwnShips_Btn = document.querySelector(
+    ".p2-ships-dialog .pick"
+  );
+  p2ShipSelectModal_Randomize = document.querySelector(
+    ".p2-ships-dialog .randomize"
+  );
 
   // Boards
   p1_DOMBoard = document.querySelector(".p1 .board");
@@ -18,13 +37,25 @@ class DomHandler {
     this.startModal_Submit.addEventListener("submit", (e) => {
       e.preventDefault();
       const formData = Object.fromEntries(new FormData(this.startModal_Submit));
-      this.closeModal(e);
+      this.closeFormModal(e);
       pubSub.emit("gotInfo", formData);
+    });
+
+    this.p1ShipSelectModal_Randomize.addEventListener("click", (e) => {
+      e.preventDefault();
+      pubSub.emit("shipSelectRequest_Randomize", "p1");
+      this.closeFormModal(e);
+    });
+
+    this.p2ShipSelectModal_Randomize.addEventListener("click", (e) => {
+      e.preventDefault();
+      pubSub.emit("shipSelectRequest_Randomize", "p2");
+      this.closeFormModal(e);
     });
 
     this.endGameModal_Close.addEventListener("click", (e) => {
       e.preventDefault();
-      this.closeModal(e);
+      this.closeFormModal(e);
     });
 
     this.endGameModal_PlayAgain.addEventListener("click", (e) => {
@@ -41,17 +72,24 @@ class DomHandler {
     this.startModal.showModal();
   }
 
-  closeModal(e) {
+  showShipSelectModal(player) {
+    console.log("show ship modal called");
+    if (player.pCode === "p1") {
+      this.p1ShipSelectModal.showModal();
+      this.p1ShipSelectModal_span.textContent = player.name;
+    } else {
+      this.p2ShipSelectModal.showModal();
+      this.p2ShipSelectModal_span.textContent = player.name;
+    }
+  }
+
+  closeFormModal(e) {
     const parentForm = e.target.closest("form");
     const parentModal = e.target.closest("dialog");
     if (parentForm !== null) {
       parentForm.reset();
     }
     parentModal.close();
-  }
-
-  closeEndGameModal() {
-    this.endGameModal.close();
   }
 
   generateBoard(player, DOMBoard) {
