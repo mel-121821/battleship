@@ -125,9 +125,6 @@ class Gameboard {
       square.recievedAttack = true;
       if (square.occupyingShipNode !== null) {
         square.occupyingShipNode.parent.hit(row, col);
-        // TODO: check the following functionality if on the shipNode already, double check and remove this line when finished
-        console.log(square.occupyingShipNode);
-        // square.occupyingShipNode.isHit;
       } else {
         square.recievedAttack;
         console.log(`attacked square ${square.row} ${square.col}`);
@@ -140,63 +137,21 @@ class Gameboard {
   reportSunk() {
     this.sunkCounter++;
     console.log("reportSunk called");
-    console.log(this);
     console.log(`${this.sunkCounter} ship(s) sunk`);
     if (this.sunkCounter === 5) {
       pubSub.emit("endGame", this.parent.pCode);
     }
-    return this.sunkCounter;
   }
 }
 
 class Square {
+  recievedAttack = false;
+  occupyingShipNode = null;
   constructor(row, col, pCode) {
     this.pCode = pCode;
     this.row = row;
     this.col = col;
-    this.recievedAttack = false;
-    this.occupyingShipNode = null;
   }
 }
-
-// console.log(board);
-
-// Troubleshooting
-// board.placeShip(1, 1, "x-axis", board.ships[0]);
-// board.placeShip(0, 0, "y-axis", board.ships[1]);
-// board.placeShip(4, 4, "x-axis", board.ships[2]);
-// board.placeShip(6, 2, "y-axis", board.ships[3]);
-// board.placeShip(7, 6, "x-axis", board.ships[4]);
-
-// // carrier
-// board.receiveAttack(1, 1);
-// board.receiveAttack(1, 2);
-// board.receiveAttack(1, 3);
-// board.receiveAttack(1, 4);
-// board.receiveAttack(1, 5);
-
-// // battleship
-// board.receiveAttack(0, 0);
-// board.receiveAttack(1, 0);
-// board.receiveAttack(2, 0);
-// board.receiveAttack(3, 0);
-
-// // destroyer
-// board.receiveAttack(4, 4);
-// board.receiveAttack(4, 5);
-// board.receiveAttack(4, 6);
-
-// // sub
-// board.receiveAttack(6, 2);
-// board.receiveAttack(7, 2);
-// board.receiveAttack(8, 2);
-
-// // patrol boat
-// board.receiveAttack(7, 6);
-// board.receiveAttack(7, 7);
-
-// pubSub.on("shipSunk", board.reportAllSunk.count);
-// board.placeShip([0, 0], "x-axis", board.carrier);
-// board.placeShips_randomize(board.ships);
 
 export { Gameboard };
