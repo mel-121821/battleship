@@ -11,12 +11,18 @@ class Driver {
     // bound methods
     this.newGame_bound = this.newGame.bind(this);
     this.initGame_bound = this.initGame.bind(this);
+    this.initP1Ships_bound = this.initP1Ships.bind(this);
+    this.initP2Ships_bound = this.initP2Ships.bind(this);
+    this.setShips_Randomize_bound = this.setShips_Randomize.bind(this);
     this.switchActivePlayer_bound = this.switchActivePlayer.bind(this);
     this.initComputerTurn_bound = this.initComputerTurn.bind(this);
     this.endGame_bound = this.endGame.bind(this);
 
     // pubsubs
     pubSub.on("gotInfo", this.initGame_bound);
+    pubSub.on("initComplete", this.initP1Ships_bound);
+    pubSub.on("shipsPlaced", this.initP2Ships_bound);
+    pubSub.on("shipSelectRequest_Randomize", this.setShips_Randomize_bound);
     pubSub.on("turnComplete", this.switchActivePlayer_bound);
     pubSub.on("newTurn", this.initComputerTurn_bound);
     pubSub.on("endGame", this.endGame_bound);
@@ -26,23 +32,19 @@ class Driver {
   newGame() {
     this.clearGameData();
     dom.clearBoard();
-    dom.closeEndGameModal();
-    console.log(pubSub.events);
+    dom.closeAllModals();
     this.clearSubs();
     pubSub.on("turnComplete", this.switchActivePlayer_bound);
     this.getPlayers();
   }
 
   clearSubs() {
-    // use object.keys
     const keys = Object.keys(pubSub.events);
     for (const key of keys) {
       if (key.charAt(0) === "p") {
-        console.log(key);
         pubSub.events[key] = [];
       }
     }
-    console.log(pubSub.events);
   }
 
   getPlayers() {
@@ -76,17 +78,36 @@ class Driver {
     this.setOpponents();
     this.active = this.p1;
     dom.initBoardUI(this.p1, this.p2);
-    this.initSetShips();
-    dom.initP1(this.active.name);
-    console.log(this.p1);
-    console.log(this.p2);
-    console.log(pubSub);
-    pubSub.emit("newTurn", console.log("New turn"));
+    pubSub.emit("initComplete", this.p1);
   }
 
-  initSetShips() {
-    this.p1.data.placeShips_randomize(this.p1.data.ships);
-    this.p2.data.placeShips_randomize(this.p2.data.ships);
+  initP1Ships() {
+    this.setShips(this.p1);
+  }
+
+  initP2Ships(player) {
+    if (player.pCode === "p1") {
+      this.setShips(this.p2);
+    } else {
+      dom.initP1(this.active.name);
+      pubSub.emit("newTurn", console.log("New turn"));
+    }
+  }
+
+  setShips(player) {
+    if (player.type === "player") {
+      dom.showShipSelectModal(player);
+    } else {
+      player.data.placeShips_randomize(player.data.ships);
+    }
+  }
+
+  setShips_Randomize(pCode) {
+    if (pCode === "p1") {
+      this.p1.data.placeShips_randomize(this.p1.data.ships);
+    } else {
+      this.p2.data.placeShips_randomize(this.p2.data.ships);
+    }
   }
 
   switchActivePlayer() {
