@@ -28,6 +28,8 @@ class DomHandler {
     ".p2-ships-dialog .randomize"
   );
 
+  allModals = document.querySelectorAll("dialog");
+
   // Boards
   p1_DOMBoard = document.querySelector(".p1 .board");
   p2_DOMBoard = document.querySelector(".p2 .board");
@@ -66,6 +68,7 @@ class DomHandler {
     // Pubsubs
     pubSub.on("receivedAttack", this.updateBoard_ReceivedAttack);
     pubSub.on("shipsPlaced", this.updateBoard_ShipsPlaced);
+    // pubSub.on("shipsPlaced", this.closeAllModals);
   }
 
   showStartModal() {
@@ -90,6 +93,12 @@ class DomHandler {
       parentForm.reset();
     }
     parentModal.close();
+  }
+
+  closeAllModals() {
+    this.allModals.forEach((modal) => {
+      modal.close();
+    });
   }
 
   generateBoard(player, DOMBoard) {
