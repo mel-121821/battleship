@@ -83,11 +83,33 @@ https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf
 
 ---
 
-### Credits:
+### Image Credits:
 
 Background Image:
 Artist: Harry Holder
 URL: https://unsplash.com/photos/beach-during-daytime-NbPJ8HM-w8c
+
+### Icon Credits:
+
+Carrier:
+Artist: Yair Cohen
+Source: <a href="https://thenounproject.com/browse/icons/term/battleship/" target="_blank" title="Battleship Icons">Noun Project</a> (CC BY 3.0)
+
+Battleship:
+Artist: Luke Anthony Firth
+Source: <a href="https://thenounproject.com/browse/icons/term/battleship/" target="_blank" title="Battleship Icons">Noun Project</a> (CC BY 3.0)
+
+Destroyer:
+Artist: Anand Prahlad
+Source: <a href="https://thenounproject.com/browse/icons/term/battleship/" target="_blank" title="Battleship Icons">Noun Project</a> (CC BY 3.0)
+
+Submarine:
+Artist: Steve Howard
+Source: <a href="https://thenounproject.com/browse/icons/term/submarine/" target="_blank" title="Submarine Icons">Noun Project</a> (CC BY 3.0)
+
+Patrol Boat:
+Artist: Vektorify
+Source: <a href="https://thenounproject.com/browse/icons/term/boat/" target="_blank" title="Boat Icons">Noun Project</a> (CC BY 3.0)
 
 ---
 
@@ -108,6 +130,9 @@ Getting HTML form values (FormData):
 https://stackoverflow.com/questions/3547035/getting-html-form-values
 
 https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData
+
+See Memory Issues heading for an example of an event listener callback that uses event as a param:
+https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#the_event_listener_callback
 
 ---
 
