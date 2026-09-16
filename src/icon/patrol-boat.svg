@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   version="1.1"
+   viewBox="-5 -10 81.250702 34.252602"
+   id="svg625"
+   sodipodi:docname="patrol-boat.svg"
+   width="81.250702"
+   height="34.252602"
+   inkscape:version="1.2.2 (b0a8486, 2022-12-01)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs629" />
+  <sodipodi:namedview
+     id="namedview627"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:showpageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#505050"
+     showgrid="false"
+     inkscape:zoom="6.0888889"
+     inkscape:cx="40.483577"
+     inkscape:cy="24.635036"
+     inkscape:window-width="1920"
+     inkscape:window-height="1032"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg625" />
+  <path
+     d="m 17.31305,-1.3101 c 1.5625,0 2.9688,-0.0625 4.4062,0 2.3438,0.125 2.6875,0.5625 2.625,2.875 -0.03125,1.625 -0.0625,3.25 0,4.875 0.03125,1 0.28125,2.0312 0.40625,2.9062 h 18.094 c 1.9688,0 3.9062,0.03125 5.875,-0.0625 0.5,-0.03125 1.1875,-0.28125 1.4062,-0.65625 1.1875,-2.125 3.1562,-2.375 5.25,-2.4688 0.84375,-0.03125 1.7188,0 2.6875,0 0.125,-3.9062 0.25,-7.6562 0.375,-11.406 0.21875,-0.03125 0.4375,-0.0625 0.65625,-0.09375 0.1875,0.46875 0.53125,0.9375 0.5625,1.4062 0.125,2.625 0.15625,5.25 0.21875,7.875 v 1.9688 c 5.3438,-0.21875 10.656,-0.40625 16.375,-0.625 -0.71875,1.625 -1.1562,3.1562 -2,4.4062 -1.6562,2.5625 -3.1562,5.1562 -3.5,8.3125 -0.09375,1 -0.6875,1.9375 -1.0938,3.0938 0.5625,0 1.0625,0.03125 1.5625,0 1.2812,-0.09375 1.5,0.8125 1.625,1.7188 0.15625,1.125 -0.65625,1.1562 -1.4688,1.1875 -3.875,0.0625 -7.75,0.25 -11.594,0.25 -19.812,-0.0625 -39.656,-0.1875 -59.469,-0.28125 h -0.5625 c -0.78125,-0.125 -1.7812,0 -1.6875,-1.2188 0.0625,-1.2188 1.0625,-0.6875 1.6562,-0.71875 1.1875,-0.0625 2.375,-0.03125 3.5625,-0.1875 -0.8125,-0.125 -1.625,-0.28125 -2.4688,-0.34375 -1.6562,-0.125 -2.9062,-1.0312 -3.4375,-2.4375 -0.9375,-2.5938 -1.5625,-5.2188 -2.375,-8.0312 h 7.625 v -4.375 c 0,-1.8125 0.0625,-1.875 1.8125,-1.8125 1.125,0.03125 2.2812,0 3.5625,0 0,-1.375 -0.03125,-2.75 0,-4.125 0.0625,-1.9062 0.4375,-2.2188 2.3125,-2.0938 0.875,0.0625 1.7812,0 2.8438,0 v -8.5938 c 0.96875,0 1.7812,-0.09375 2.5625,0.03125 1.125,0.15625 1.5625,0.9375 1.5625,2.0312 0.03125,2.1562 0.03125,4.3125 0.03125,6.5938 z"
+     id="path619" />
+  <text
+     x="-14.37495"
+     y="74.595901"
+     font-size="5px"
+     font-weight="bold"
+     font-family="'Arbeit Regular', Helvetica, Arial-Unicode, Arial, Sans-serif"
+     fill="#000000"
+     id="text621">Created by Vektorify</text>
+  <text
+     x="-14.37495"
+     y="79.595901"
+     font-size="5px"
+     font-weight="bold"
+     font-family="'Arbeit Regular', Helvetica, Arial-Unicode, Arial, Sans-serif"
+     fill="#000000"
+     id="text623">from Noun Project</text>
+</svg>
