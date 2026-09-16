@@ -12,28 +12,38 @@
           <legend>Who is playing?</legend>
         </div>
         <div class="inputs">
-            <legend>Player 1:</legend>
-            <fieldset class="player-1">
-              <input type="radio" id="p1-human" name="p1-type" value="human" checked/>
-              <label for="p1-human">Human</label>
-              <input type="radio" id="p1-comp" name="p1-type" value="computer"/>
-              <label for="p1-comp">Computer</label>
-            </fieldset>
-            <label for="p1-name">Name:</label>
-            <input type="text" id="p1-name" name="p1-name">
-            <legend>Player 2:</legend>
-            <fieldset class="player-2">
-              <input type="radio" id="p2-human" name="p2-type" value="human" checked/>
-              <label for="p2-human">Human</label>
-              <input type="radio" id="p2-comp" name="p2-type" value="computer"/>
-              <label for="p2-comp">Computer</label>
-            </fieldset>
-            <label for="p2-name">Name</label>
-              <input type="text" id="p2-name" name="p2-name">
-          </div>
-          
+          <legend>Player 1:</legend>
+          <fieldset class="player-1">
+            <input
+              type="radio"
+              id="p1-human"
+              name="p1-type"
+              value="human"
+              checked
+            />
+            <label for="p1-human">Human</label>
+            <input type="radio" id="p1-comp" name="p1-type" value="computer" />
+            <label for="p1-comp">Computer</label>
+          </fieldset>
+          <label for="p1-name">Name:</label>
+          <input type="text" id="p1-name" name="p1-name" />
+          <legend>Player 2:</legend>
+          <fieldset class="player-2">
+            <input
+              type="radio"
+              id="p2-human"
+              name="p2-type"
+              value="human"
+              checked
+            />
+            <label for="p2-human">Human</label>
+            <input type="radio" id="p2-comp" name="p2-type" value="computer" />
+            <label for="p2-comp">Computer</label>
+          </fieldset>
+          <label for="p2-name">Name</label>
+          <input type="text" id="p2-name" name="p2-name" />
           <div class="start-btn">
-            <input type="submit" value="Start Game!">
+            <input type="submit" value="Start Game!" />
           </div>
         </div>
       </form>
@@ -58,8 +68,7 @@
     </dialog>
     <dialog class="end-game">
       <button class="close">X</button>
-      <p><span></span> wins!
-      </p>
+      <p><span></span> wins!</p>
       <button class="replay">Play again</button>
     </dialog>
     <div class="img-wrapper">
@@ -67,50 +76,66 @@
         <div class="header">
           <h1>Battleship</h1>
         </div>
-        
-          <div class="main">
-            <div class="p1 column">
-              <div class="name">Player One</div>
-              <div class="board-wrapper">
-                <div class="ship-select">
-                  <div class="ship carrier"></div>
-                  <div class="ship battleship"></div>
-                  <div class="ship destroyer"></div>
-                  <div class="ship submarine"></div>
-                  <div class="ship patrol-boat"></div>
+        <div class="main">
+          <div class="p1 column">
+            <div class="name">Player One</div>
+            <div class="board-wrapper">
+              <div class="ship-select">
+                <div class="ship carrier">
+                  <img src="./icon/carrier.svg" alt="carrier" />
                 </div>
-                <div class="board"></div>
+                <div class="ship battleship">
+                  <img src="./icon/battleship.svg" alt="battleship" />
+                </div>
+                <div class="ship destroyer">
+                  <img src="./icon/destroyer.svg" alt="destroyer" />
+                </div>
+                <div class="ship submarine">
+                  <img src="./icon/submarine.svg" alt="submarine" />
+                </div>
+                <div class="ship patrol-boat">
+                  <img src="./icon/patrol-boat.svg" alt="patrol boat" />
+                </div>
               </div>
-              <div class="ship-data"></div>
+              <div class="board"></div>
             </div>
-            <div class="p2 column">
-              <div class="name">Computer</div>
-              <div class="board-wrapper">
-                <div class="ship-select">
-                  <div class="ship carrier"></div>
-                  <div class="ship battleship"></div>
-                  <div class="ship destroyer"></div>
-                  <div class="ship submarine"></div>
-                  <div class="ship patrol-boat"></div>
-                </div>
-                <div class="board"></div>
-              </div>
             <div class="ship-data"></div>
           </div>
+          <div class="p2 column">
+            <div class="name">Computer</div>
+            <div class="board-wrapper">
+              <div class="ship-select">
+                <div class="ship carrier">
+                  <img src="./icon/carrier.svg" alt="carrier" />
+                </div>
+                <div class="ship battleship">
+                  <img src="./icon/battleship.svg" alt="battleship" />
+                </div>
+                <div class="ship destroyer">
+                  <img src="./icon/destroyer.svg" alt="destroyer" />
+                </div>
+                <div class="ship submarine">
+                  <img src="./icon/submarine.svg" alt="submarine" />
+                </div>
+                <div class="ship patrol-boat">
+                  <img src="./icon/patrol-boat.svg" alt="patrol boat" />
+                </div>
+              </div>
+              <div class="board"></div>
+            </div>
+            <div class="ship-data"></div>
           </div>
-      
+        </div>
+
         <div class="footer">
-          <div class="text">
-            Created by M.e.l.
-          </div>
+          <div class="text">Created by M.e.l.</div>
           <div class="icon">
             <a href="https://github.com/mel-121821/battleship" target="_blank">
-              <img src="./icon/github.svg" alt="github logo">
+              <img src="./icon/github.svg" alt="github logo" />
             </a>
           </div>
         </div>
       </div>
     </div>
-  </div>
   </body>
 </html>
