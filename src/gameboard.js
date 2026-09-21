@@ -5,12 +5,35 @@ class Gameboard {
   constructor(parent) {
     this.parent = parent;
     this.ships = [
-      { name: "carrier", len: 5 },
-      { name: "battleship", len: 4 },
-      { name: "destroyer", len: 3 },
-      { name: "submarine", len: 3 },
-      { name: "patrolBoat", len: 2 },
+      { name: "carrier", len: 5, axis: "x" },
+      { name: "battleship", len: 4, axis: "x" },
+      { name: "destroyer", len: 3, axis: "x" },
+      { name: "submarine", len: 3, axis: "x" },
+      { name: "patrol-boat", len: 2, axis: "x" },
     ];
+
+    // this.ships = {
+    //   carrier: {
+    //     length: 5,
+    //     axis: "x",
+    //   },
+    //   battleship: {
+    //     length: 4,
+    //     axis: "x",
+    //   },
+    //   destroyer: {
+    //     length: 3,
+    //     axis: "x",
+    //   },
+    //   submarine: {
+    //     length: 3,
+    //     axis: "x",
+    //   },
+    //   ["patrol-boat"]: {
+    //     length: 2,
+    //     axis: "x",
+    //   },
+    // };
 
     // board
     this.rows = 10;
@@ -18,7 +41,9 @@ class Gameboard {
     this.board = this.createBoard();
 
     // reporting
+    this.shipPlacedCounter = 0;
     this.sunkCounter = 0;
+    // this.placeShip_bound = this.placeShip.bind(this)
     this.reportSunk_bound = this.reportSunk.bind(this);
 
     // subs
@@ -34,6 +59,22 @@ class Gameboard {
       }
     }
     return board;
+  }
+
+  changeShipDirection(shipName) {
+    for (const ship of this.ships) {
+      if (ship.name === shipName) {
+        ship.axis = ship.axis === "x" ? "y" : "x";
+        console.log(`${ship.name}'s axis was changed to ${ship.axis}`);
+      }
+    }
+    // const ship = this.ships[shipName];
+    // ship.axis = ship.axis === "x" ? "y" : "x";
+    // console.log(
+    //   `${Object.entries(this.ships[shipName])}'s axis was changed to ${
+    //     this.ships[shipName].axis
+    //   }`
+    // );
   }
 
   shipPlacement_isValid(shipCoords) {
@@ -53,30 +94,47 @@ class Gameboard {
     return result;
   }
 
-  generateShipCoords(row, col, dir, shipLength) {
+  generateShipCoords(row, col, shipName) {
     const shipCoords = [];
-    if (dir === "x-axis") {
-      for (let i = 0; i < shipLength; i++) {
+    const shipObj = this.getShipObjFromName(shipName);
+    if (shipObj.axis === "x") {
+      for (let i = 0; i < shipObj.len; i++) {
         shipCoords.push([row, col++]);
       }
     } else {
-      for (let i = 0; i < shipLength; i++) {
+      for (let i = 0; i < shipObj.len; i++) {
         shipCoords.push([row++, col]);
       }
     }
     return shipCoords;
   }
 
-  placeShip(row, col, dir, shipType) {
-    const shipCoords = this.generateShipCoords(row, col, dir, shipType.len);
+  getShipObjFromName(shipName) {
+    let shipObj;
+    for (const ship of this.ships) {
+      if (ship.name === `${shipName}`) {
+        shipObj = ship;
+      }
+    }
+    return shipObj;
+  }
+
+  placeShip(row, col, shipName) {
+    const shipCoords = this.generateShipCoords(row, col, shipName);
     if (this.shipPlacement_isValid(shipCoords)) {
       const ship = new Ship(
         shipCoords,
-        shipType.name,
+        shipName,
         this.parent.name,
         this.parent.pCode
       );
       this.setBoard(ship);
+      this.shipPlacedCounter++;
+      pubSub.emit(`shipPlaced`, [
+        this.parent,
+        this.shipPlacedCounter,
+        shipName,
+      ]);
       return ship;
     } // else do nothing, can't place ship in occupied space or off board
   }
@@ -89,32 +147,44 @@ class Gameboard {
     }
   }
 
-  randomizeShipArgs() {
+  randomizeCoords() {
     const values = [];
     const x = Math.floor(Math.random() * 10);
     const y = Math.floor(Math.random() * 10);
-    const axis = (() => {
+    values.push(x, y);
+    return values;
+  }
+
+  randomizeAxis(curr) {
+    curr.axis = (() => {
       if (Math.floor(Math.random() * 2) < 1) {
-        return "x-axis";
+        return "x";
+      } else {
+        return "y";
       }
     })();
-    values.push(x, y, axis);
-    return values;
   }
 
   placeShips_randomize(ships) {
     if (!ships.length) {
-      pubSub.emit("shipsPlaced", this.parent);
+      console.log(ships);
+      // pubSub.emit("allShipsPlaced", [this.parent]);
       return;
     }
-    let curr = ships.shift();
-    let args = this.randomizeShipArgs();
-    let newShip = this.placeShip(args[0], args[1], args[2], curr);
+    // create a shallow copy
+    const shipsArr = ships.slice();
+    let curr = shipsArr.shift();
+    let coords = this.randomizeCoords();
+    this.randomizeAxis(curr);
+    console.log(curr.name);
+    let newShip = this.placeShip(coords[0], coords[1], curr.name);
+    console.log(newShip);
     while (newShip === undefined) {
-      args = this.randomizeShipArgs();
-      newShip = this.placeShip(args[0], args[1], args[2], curr);
+      coords = this.randomizeCoords();
+      this.randomizeAxis(curr);
+      newShip = this.placeShip(coords[0], coords[1], curr.name);
     }
-    this.placeShips_randomize(ships);
+    this.placeShips_randomize(shipsArr);
   }
 
   receiveAttack(row, col) {
