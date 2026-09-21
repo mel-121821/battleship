@@ -153,6 +153,8 @@ html {
   grid-template-rows: 100px 1fr 50px;
 }
 
+/* __________dialog__________ */
+
 /* __________title__________ */
 
 .header {
@@ -243,6 +245,10 @@ html {
   border-radius: 70%;
 }
 
+.dragging {
+  opacity: 0.5;
+}
+
 .board {
   height: 380px;
   width: 380px;
@@ -255,6 +261,11 @@ html {
   background-color: rgb(255, 255, 255, 0.65);
   border-radius: 3px;
   border: 1px solid cadetblue;
+}
+
+.dragover {
+  background-color: white;
+  opacity: 1;
 }
 
 .occupied {
