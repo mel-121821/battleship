@@ -52,23 +52,23 @@ At this point it is appropriate to begin crafting your User Interface.
 
 - [x] You’ll need methods to render each player’s Gameboard, so put them in an appropriate module.
 
-- [] Your event listeners should step through the game turn by turn using only methods from other objects. If at any point you are tempted to write a new function, step back and figure out which class or module that function should belong to.
+- [x] Your event listeners should step through the game turn by turn using only methods from other objects. If at any point you are tempted to write a new function, step back and figure out which class or module that function should belong to.
 
 - [x] For attacks, let the user click on a coordinate in the enemy Gameboard. Send the user input to methods on your objects, and re-render the boards to display the new information.
 
 - [x] Players should take turns playing the game by attacking the enemy Gameboard. If you feel the need to keep track of the current player’s turn, it’s appropriate to manage that in this module, instead of another mentioned object.
 
-- [] The game is played against the computer, so make the ‘computer’ players capable of making random plays. The computer does not have to be smart, but it should know whether or not a given move is legal (i.e. it shouldn’t shoot the same coordinate twice).
+- [x] The game is played against the computer, so make the ‘computer’ players capable of making random plays. The computer does not have to be smart, but it should know whether or not a given move is legal (i.e. it shouldn’t shoot the same coordinate twice).
 
-- [] Create conditions so that the game ends once one player’s ships have all been sunk. This function is also appropriate for this module.
+- [x] Create conditions so that the game ends once one player’s ships have all been sunk. This function is also appropriate for this module.
 
-- [] Finish it up by implementing a system that allows players to place their ships. For example, you can let them type coordinates for each ship or have a button to cycle through random placements.
+- [x] Finish it up by implementing a system that allows players to place their ships. For example, you can let them type coordinates for each ship or have a button to cycle through random placements.
 
 **Extra credit**
 
 Make your battleship project more impressive by introducing any of these modifications.
 
-- [] Implement drag and drop to allow players to place their ships.
+- [x] Implement drag and drop to allow players to place their ships.
 
 - [] Create a 2-player option that lets users take turns by passing the laptop back and forth, or by spinning the monitor around on a desktop. Implement a ‘pass device’ screen so that players don’t see each other’s boards!
 
@@ -133,6 +133,21 @@ https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData
 
 See Memory Issues heading for an example of an event listener callback that uses event as a param:
 https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#the_event_listener_callback
+
+MDN drag/drop data manipulation
+https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_data_store#modifying_the_drag_data_store
+
+Passing multiple args to event callbacks:
+https://stackoverflow.com/questions/16053866/javascript-pass-multiple-arguments-to-eventlistener-and-the-event
+
+getEventListeners(object) in devTools:
+https://developer.chrome.com/docs/devtools/console/utilities/#monitorEvents-function
+
+monitorEvents() & selecting an element in devTools with ($0):
+https://stackoverflow.com/questions/10213703/how-do-i-view-events-fired-on-an-element-in-chrome-devtools
+
+How to console.log dataTransfer from drag/drop (use dataTransfer.files);
+https://timonweb.com/javascript/dragndrop-event-handling-gotchas-i-wish-i-knew-earlier/
 
 ---
 
