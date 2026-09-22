@@ -34,10 +34,12 @@ class Ship {
 
   hit(row, col) {
     this.hits++;
-    console.log(`${this.playerName}'s ship was hit`);
+    console.log(`${this.playerName}'s ${this.shipName} was hit`);
     const shipArr = this.area;
+    const parsedRow = parseInt(row);
+    const parsedCol = parseInt(col);
     for (let node of shipArr) {
-      if (node.row === row && node.col === col) {
+      if (node.row === parsedRow && node.col === parsedCol) {
         node.isHit = true;
         pubSub.emit(`${this.pCode}${this.shipName}isHit`, this);
         break;
