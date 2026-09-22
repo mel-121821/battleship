@@ -1,5 +1,5 @@
 import { Player, Computer } from "./player.js";
-import { dom } from "./domHandler.js";
+import { dom, modals } from "./domHandler.js";
 import { pubSub } from "./pubsub.js";
 
 class Driver {
@@ -13,7 +13,12 @@ class Driver {
     this.initGame_bound = this.initGame.bind(this);
     this.initP1Ships_bound = this.initP1Ships.bind(this);
     this.initP2Ships_bound = this.initP2Ships.bind(this);
+    this.setShipEvents_bound = this.setShipEvents.bind(this);
+    this.updateBoard_ShipPlaced_bound = this.updateBoard_ShipPlaced.bind(this);
+    this.rotateShip_bound = this.rotateShip.bind(this);
+    this.placeShip_bound = this.placeShip.bind(this);
     this.setShips_Randomize_bound = this.setShips_Randomize.bind(this);
+    this.receiveAttack_bound = this.receiveAttack.bind(this);
     this.switchActivePlayer_bound = this.switchActivePlayer.bind(this);
     this.initComputerTurn_bound = this.initComputerTurn.bind(this);
     this.endGame_bound = this.endGame.bind(this);
@@ -21,18 +26,25 @@ class Driver {
     // pubsubs
     pubSub.on("gotInfo", this.initGame_bound);
     pubSub.on("initComplete", this.initP1Ships_bound);
-    pubSub.on("shipsPlaced", this.initP2Ships_bound);
+    pubSub.on("setShipEvents", this.setShipEvents_bound);
+    pubSub.on("rotateShip", this.rotateShip_bound);
+    pubSub.on("shipPlaced", this.updateBoard_ShipPlaced_bound);
+    pubSub.on("allShipsPlaced", this.initP2Ships_bound);
     pubSub.on("shipSelectRequest_Randomize", this.setShips_Randomize_bound);
+    pubSub.on("placeShip", this.placeShip_bound);
+    pubSub.on("receiveAttack", this.receiveAttack_bound);
     pubSub.on("turnComplete", this.switchActivePlayer_bound);
     pubSub.on("newTurn", this.initComputerTurn_bound);
     pubSub.on("endGame", this.endGame_bound);
     pubSub.on("newGame", this.newGame_bound);
   }
 
+  //TODo: if randomize is active, pubsub for shipPlaced should be turned off, otherwise conflicting pubSubs will go off ane events will be out of order
+
   newGame() {
     this.clearGameData();
     dom.clearBoard();
-    dom.closeAllModals();
+    modals.closeAllModals();
     this.clearSubs();
     pubSub.on("turnComplete", this.switchActivePlayer_bound);
     this.getPlayers();
@@ -48,7 +60,7 @@ class Driver {
   }
 
   getPlayers() {
-    dom.showStartModal();
+    modals.getPlayers();
   }
 
   initPlayers(playerList) {
@@ -77,6 +89,7 @@ class Driver {
     this.initPlayers(playerList);
     this.setOpponents();
     this.active = this.p1;
+    //
     dom.initBoardUI(this.p1, this.p2);
     pubSub.emit("initComplete", this.p1);
   }
@@ -90,14 +103,43 @@ class Driver {
       this.setShips(this.p2);
     } else {
       dom.initP1(this.active.name);
-      pubSub.emit("newTurn", console.log("New turn"));
+      // pubSub.emit("newTurn", console.log("New turn"));
+      pubSub.emit("setBoardEvents", player);
     }
+  }
+
+  setShipEvents(pCode) {
+    console.log(pCode);
+    if (this.p1.pCode === pCode) {
+      dom.setShipSelectEvents(pCode);
+      dom.setShipDropEvents(this.p1);
+    }
+    if (this.p2.pCode === pCode) {
+      dom.setShipSelectEvents(pCode);
+      dom.setShipDropEvents(this.p2);
+    }
+  }
+
+  rotateShip(arr) {
+    const pCode = arr[0];
+    const shipName = arr[1];
+    this[pCode].data.changeShipDirection(shipName);
+  }
+
+  placeShip(data) {
+    console.log(data);
+    const shipName = data[0];
+    const pCode = data[1];
+    const row = data[2];
+    const col = data[3];
+    this[pCode].data.placeShip(row, col, shipName);
   }
 
   setShips(player) {
     if (player.type === "player") {
-      dom.showShipSelectModal(player);
+      modals.showShipSelect(player);
     } else {
+      console.log("computer's turn to place ships");
       player.data.placeShips_randomize(player.data.ships);
     }
   }
@@ -108,6 +150,24 @@ class Driver {
     } else {
       this.p2.data.placeShips_randomize(this.p2.data.ships);
     }
+  }
+
+  updateBoard_ShipPlaced(data) {
+    console.log(data);
+    if (data[1] < 5) {
+      // dom.updateBoard_ShipsPlaced(data[0]);
+      // do nothing
+    } else {
+      console.log("All ships placed");
+      pubSub.emit("allShipsPlaced", data[0]);
+    }
+  }
+
+  receiveAttack(data) {
+    const pCode = data[0];
+    const row = data[1];
+    const col = data[2];
+    this[pCode].data.receiveAttack(row, col);
   }
 
   switchActivePlayer() {
