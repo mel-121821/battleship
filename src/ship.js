@@ -19,7 +19,9 @@ class Ship {
     this.hits = 0;
     this.sunk = false;
 
-    pubSub.on(`${this.pCode}${this.shipName}isHit`, this.isSunk);
+    this.isSunk_bound = this.isSunk.bind(this);
+
+    pubSub.on(`${this.pCode}${this.shipName}isHit`, this.isSunk_bound);
   }
 
   buildShip(shipCoords) {
@@ -36,11 +38,10 @@ class Ship {
     this.hits++;
     console.log(`${this.playerName}'s ${this.shipName} was hit`);
     const shipArr = this.area;
-    const parsedRow = parseInt(row);
-    const parsedCol = parseInt(col);
     for (let node of shipArr) {
-      if (node.row === parsedRow && node.col === parsedCol) {
+      if (node.row === row && node.col === col) {
         node.isHit = true;
+        pubSub.emit(`${this.pCode}ShipIsHit`, [row, col]);
         pubSub.emit(`${this.pCode}${this.shipName}isHit`, this);
         break;
       }
@@ -51,7 +52,7 @@ class Ship {
     if (ship.hits === ship.area.length) {
       ship.sunk = true;
       console.log(`${ship.playerName}'s ship was sunk`);
-      pubSub.emit(`${ship.pCode}shipIsSunk`);
+      pubSub.emit(`${ship.pCode}shipIsSunk`, this);
     }
   }
 }
@@ -66,3 +67,9 @@ class Node {
 }
 
 export { Ship };
+
+// BUG LOG:
+
+// BUG: When user places ships, if/else block does not run when ship is hit
+// issue with data type suspected
+// TODO (DONE): investigate the transfer of row/col in domHandler and which data type is represented
