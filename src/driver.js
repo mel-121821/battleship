@@ -14,7 +14,8 @@ class Driver {
     this.initP1Ships_bound = this.initP1Ships.bind(this);
     this.initP2Ships_bound = this.initP2Ships.bind(this);
     this.setShipEvents_bound = this.setShipEvents.bind(this);
-    this.updateBoard_ShipPlaced_bound = this.updateBoard_ShipPlaced.bind(this);
+    this.updateBoard_AllShipsPlaced_bound =
+      this.updateBoard_AllShipsPlaced.bind(this);
     this.rotateShip_bound = this.rotateShip.bind(this);
     this.placeShip_bound = this.placeShip.bind(this);
     this.setShips_Randomize_bound = this.setShips_Randomize.bind(this);
@@ -28,7 +29,7 @@ class Driver {
     pubSub.on("initComplete", this.initP1Ships_bound);
     pubSub.on("setShipEvents", this.setShipEvents_bound);
     pubSub.on("rotateShip", this.rotateShip_bound);
-    pubSub.on("shipPlaced", this.updateBoard_ShipPlaced_bound);
+    pubSub.on("shipPlaced", this.updateBoard_AllShipsPlaced_bound);
     pubSub.on("allShipsPlaced", this.initP2Ships_bound);
     pubSub.on("shipSelectRequest_Randomize", this.setShips_Randomize_bound);
     pubSub.on("placeShip", this.placeShip_bound);
@@ -38,8 +39,6 @@ class Driver {
     pubSub.on("endGame", this.endGame_bound);
     pubSub.on("newGame", this.newGame_bound);
   }
-
-  //TODo: if randomize is active, pubsub for shipPlaced should be turned off, otherwise conflicting pubSubs will go off ane events will be out of order
 
   newGame() {
     this.clearGameData();
@@ -51,6 +50,7 @@ class Driver {
   }
 
   clearSubs() {
+    // removes pubs from discarded player instances, otherwise player specific events will be duplicated with each new game
     const keys = Object.keys(pubSub.events);
     for (const key of keys) {
       if (key.charAt(0) === "p") {
@@ -103,13 +103,11 @@ class Driver {
       this.setShips(this.p2);
     } else {
       dom.initP1(this.active.name);
-      // pubSub.emit("newTurn", console.log("New turn"));
       pubSub.emit("setBoardEvents", player);
     }
   }
 
   setShipEvents(pCode) {
-    console.log(pCode);
     if (this.p1.pCode === pCode) {
       dom.setShipSelectEvents(pCode);
       dom.setShipDropEvents(this.p1);
@@ -127,7 +125,6 @@ class Driver {
   }
 
   placeShip(data) {
-    console.log(data);
     const shipName = data[0];
     const pCode = data[1];
     const row = data[2];
@@ -152,10 +149,9 @@ class Driver {
     }
   }
 
-  updateBoard_ShipPlaced(data) {
+  updateBoard_AllShipsPlaced(data) {
     console.log(data);
     if (data[1] < 5) {
-      // dom.updateBoard_ShipsPlaced(data[0]);
       // do nothing
     } else {
       console.log("All ships placed");
@@ -185,7 +181,7 @@ class Driver {
     if (this.active.type === "computer") {
       dom.disableBoards();
       setTimeout(() => {
-        this.active.attackOpponent_bound();
+        this.active.calculateAttack_bound();
       }, 500);
     }
   }
@@ -204,20 +200,3 @@ class Driver {
 }
 
 export { Driver };
-
-// Order of operations:
-
-// init:
-// get player/computer info
-// generate boards
-// place ships
-
-// game starts:
-// player selects a square
-// gameboard.recieveAttack is called
-// ~cascade of events~
-// player turn ends
-// players swap
-
-// repeat steps for player 2/computer
-// until all boats from 1 party are sunk
