@@ -41,7 +41,6 @@ class DomHandler {
   removeShipSelectEvents(shipData) {
     const player = shipData[0];
     const shipName = shipData[2];
-    console.log(`removing events from ${shipName}`);
     const shipSelectNode = document.querySelector(
       `.${player.pCode} .${shipName} img`
     );
@@ -90,9 +89,6 @@ class DomHandler {
         square.removeEventListener("dragover", events.dragover);
         square.removeEventListener("dragenter", events.dragenter);
         square.removeEventListener("dragleave", events.dragleave);
-
-        // the following event is not being removed, likely because the fn was declared in a closure that is not accessble by this function, and it does not work to simply create a reference of it - if has to be the actual fn
-        // TODO: find a workarond that uses the actual fn, not a reference of it - may need to find another method to
         square.removeEventListener("drop", events.drop);
       }
     }
@@ -225,13 +221,9 @@ class Events {
   }
 
   rotate(e) {
-    console.log(e.target);
-    console.log(e.target.closest(".column").classList[0]);
-    const data = [e.target.closest(".column").classList[0]];
-    data.push(e.target.closest("div").classList[1]);
-    console.log(data);
-    pubSub.emit("rotateShip", data);
-    data.pop(); // remove after use, as shipName will be re-added on every click
+    const pCodeFromClass = [e.target.closest(".column").classList[0]];
+    const shipNameFromClass = e.target.closest("div").classList[1];
+    pubSub.emit("rotateShip", [pCodeFromClass, shipNameFromClass]);
   }
 
   dragover(e) {
@@ -239,7 +231,6 @@ class Events {
   }
 
   dragenter(e) {
-    console.log(`dragover ${e.target.classList}`);
     e.target.classList.add("dragover"); // highlight dropZone when dragable element enters
   }
 
@@ -249,24 +240,28 @@ class Events {
 
   drop(e) {
     e.preventDefault(); // prevent default (open as link for some elements)
-    const data = [];
     const square = e.target;
     const shipName = e.dataTransfer.getData("text/plain");
     const pCode = square.closest(".column").classList[0];
-    const row = square.classList[1].charAt(square.classList[1].length - 1);
-    const col = square.classList[2].charAt(square.classList[2].length - 1);
-    data.push(shipName, pCode, row, col);
-    pubSub.emit("placeShip", data);
+    const row = parseInt(
+      square.classList[1].charAt(square.classList[1].length - 1)
+    );
+    const col = parseInt(
+      square.classList[2].charAt(square.classList[2].length - 1)
+    );
+    pubSub.emit("placeShip", [shipName, pCode, row, col]);
   }
 
   receiveAttack(e) {
-    const data = [];
     const square = e.target;
     const pCode = e.target.closest(".column").classList[0];
-    const row = square.classList[1].charAt(square.classList[1].length - 1);
-    const col = square.classList[2].charAt(square.classList[2].length - 1);
-    data.push(pCode, row, col);
-    pubSub.emit("receiveAttack", data);
+    const row = parseInt(
+      square.classList[1].charAt(square.classList[1].length - 1)
+    );
+    const col = parseInt(
+      square.classList[2].charAt(square.classList[2].length - 1)
+    );
+    pubSub.emit("receiveAttack", [pCode, row, col]);
   }
 }
 
@@ -302,23 +297,29 @@ class Modal {
   constructor() {
     // Event listeners
     this.playerInfo_Submit.addEventListener("submit", events.getPlayerInfo);
+
     this.p1ShipSelect_Randomize.addEventListener(
       "click",
       events.requestRandomize
     );
+
     this.p2ShipSelect_Randomize.addEventListener(
       "click",
       events.requestRandomize
     );
+
     this.p1ShipSelect_PickOwnShips_Btn.addEventListener(
       "click",
       events.requestPickOwn
     );
+
     this.p2ShipSelect_PickOwnShips_Btn.addEventListener(
       "click",
       events.requestPickOwn
     );
+
     this.endGame_Close.addEventListener("click", events.closeModal);
+
     this.endGame_PlayAgain.addEventListener("click", events.requestNewGame);
   }
 
