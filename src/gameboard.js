@@ -12,29 +12,6 @@ class Gameboard {
       { name: "patrol-boat", len: 2, axis: "x" },
     ];
 
-    // this.ships = {
-    //   carrier: {
-    //     length: 5,
-    //     axis: "x",
-    //   },
-    //   battleship: {
-    //     length: 4,
-    //     axis: "x",
-    //   },
-    //   destroyer: {
-    //     length: 3,
-    //     axis: "x",
-    //   },
-    //   submarine: {
-    //     length: 3,
-    //     axis: "x",
-    //   },
-    //   ["patrol-boat"]: {
-    //     length: 2,
-    //     axis: "x",
-    //   },
-    // };
-
     // board
     this.rows = 10;
     this.cols = 10;
@@ -68,13 +45,6 @@ class Gameboard {
         console.log(`${ship.name}'s axis was changed to ${ship.axis}`);
       }
     }
-    // const ship = this.ships[shipName];
-    // ship.axis = ship.axis === "x" ? "y" : "x";
-    // console.log(
-    //   `${Object.entries(this.ships[shipName])}'s axis was changed to ${
-    //     this.ships[shipName].axis
-    //   }`
-    // );
   }
 
   shipPlacement_isValid(shipCoords) {
@@ -122,6 +92,7 @@ class Gameboard {
   placeShip(row, col, shipName) {
     const shipCoords = this.generateShipCoords(row, col, shipName);
     if (this.shipPlacement_isValid(shipCoords)) {
+      // TODO: pass "this" into new Ship instead
       const ship = new Ship(
         shipCoords,
         shipName,
@@ -167,8 +138,6 @@ class Gameboard {
 
   placeShips_randomize(ships) {
     if (!ships.length) {
-      console.log(ships);
-      // pubSub.emit("allShipsPlaced", [this.parent]);
       return;
     }
     // create a shallow copy
@@ -176,9 +145,7 @@ class Gameboard {
     let curr = shipsArr.shift();
     let coords = this.randomizeCoords();
     this.randomizeAxis(curr);
-    console.log(curr.name);
     let newShip = this.placeShip(coords[0], coords[1], curr.name);
-    console.log(newShip);
     while (newShip === undefined) {
       coords = this.randomizeCoords();
       this.randomizeAxis(curr);
@@ -189,14 +156,13 @@ class Gameboard {
 
   receiveAttack(row, col) {
     const square = this.board[row][col];
-    if (square.recievedAttack) {
+    if (square.receivedAttack) {
       pubSub.emit("newTurn", console.log("this square has already been hit"));
     } else {
-      square.recievedAttack = true;
+      square.receivedAttack = true;
       if (square.occupyingShipNode !== null) {
         square.occupyingShipNode.parent.hit(row, col);
       } else {
-        square.recievedAttack;
         console.log(`attacked square ${square.row} ${square.col}`);
         console.log("missed!");
       }
@@ -206,7 +172,6 @@ class Gameboard {
 
   reportSunk() {
     this.sunkCounter++;
-    console.log("reportSunk called");
     console.log(`${this.sunkCounter} ship(s) sunk`);
     if (this.sunkCounter === 5) {
       pubSub.emit("endGame", this.parent.pCode);
@@ -215,7 +180,7 @@ class Gameboard {
 }
 
 class Square {
-  recievedAttack = false;
+  receivedAttack = false;
   occupyingShipNode = null;
   constructor(row, col, pCode) {
     this.pCode = pCode;
