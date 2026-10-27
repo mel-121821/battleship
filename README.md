@@ -72,82 +72,91 @@ Make your battleship project more impressive by introducing any of these modific
 
 - [] Create a 2-player option that lets users take turns by passing the laptop back and forth, or by spinning the monitor around on a desktop. Implement a ‘pass device’ screen so that players don’t see each other’s boards!
 
-- [] Polish the intelligence of the computer player by having it try adjacent slots after getting a ‘hit’.
+- [x] Polish the intelligence of the computer player by having it try adjacent slots after getting a ‘hit’.
 
 ---
 
 ### Tools:
 
-VS Code keyboard shortcuts:
+VS Code keyboard shortcuts:\
 https://code.visualstudio.com/shortcuts/keyboard-shortcuts-linux.pdf
 
 ---
 
 ### Image Credits:
 
-Background Image:
-Artist: Harry Holder
+Background Image:\
+Artist: Harry Holder\
 URL: https://unsplash.com/photos/beach-during-daytime-NbPJ8HM-w8c
 
 ### Icon Credits:
 
-Carrier:
-Artist: Yair Cohen
-Source: <a href="https://thenounproject.com/browse/icons/term/battleship/" target="_blank" title="Battleship Icons">Noun Project</a> (CC BY 3.0)
+Carrier:\
+Artist: Yair Cohen\
+Source: <a href="https://thenounproject.com/icon/battleship-24635/"
 
-Battleship:
-Artist: Luke Anthony Firth
-Source: <a href="https://thenounproject.com/browse/icons/term/battleship/" target="_blank" title="Battleship Icons">Noun Project</a> (CC BY 3.0)
+Battleship:\
+Artist: Luke Anthony Firth\
+Source: <a href="https://thenounproject.com/icon/battleship-9270/"
 
-Destroyer:
-Artist: Anand Prahlad
-Source: <a href="https://thenounproject.com/browse/icons/term/battleship/" target="_blank" title="Battleship Icons">Noun Project</a> (CC BY 3.0)
+Destroyer:\
+Artist: Anand Prahlad\
+Source: <a href="https://thenounproject.com/icon/battleship-44759/"
 
-Submarine:
-Artist: Steve Howard
-Source: <a href="https://thenounproject.com/browse/icons/term/submarine/" target="_blank" title="Submarine Icons">Noun Project</a> (CC BY 3.0)
+Submarine:\
+Artist: Luke Anthony Firth\
+Source: <a href="https://thenounproject.com/icon/submarine-25578/"
 
-Patrol Boat:
-Artist: Vektorify
-Source: <a href="https://thenounproject.com/browse/icons/term/boat/" target="_blank" title="Boat Icons">Noun Project</a> (CC BY 3.0)
+Patrol Boat:\
+Artist: James Keuning\
+Source: <a href="https://thenounproject.com/icon/boat-7875/"
 
 ---
 
 ### Resources:
 
-MDN .bind()
+MDN .bind()\
 https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind
 
-Guidelines for git commits (Angular convention):
+Guidelines for git commits (Angular convention):\
 https://github.com/angular/angular/blob/22b96b9/CONTRIBUTING.md#-commit-message-guidelines
 
-Making an element unclickable: (forward to pointerEvents)
+Making an element unclickable: (forward to pointerEvents)\
 https://stackoverflow.com/questions/18083061/make-element-unclickable-click-things-behind-it
 
 https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/pointer-events#Values
 
-Getting HTML form values (FormData):
+Getting HTML form values (FormData):\
 https://stackoverflow.com/questions/3547035/getting-html-form-values
 
 https://developer.mozilla.org/en-US/docs/Web/API/FormData/FormData
 
-See Memory Issues heading for an example of an event listener callback that uses event as a param:
+See Memory Issues heading for an example of an event listener callback that uses event as a param:\
 https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#the_event_listener_callback
 
-MDN drag/drop data manipulation
+MDN drag/drop data manipulation:\
 https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_data_store#modifying_the_drag_data_store
 
-Passing multiple args to event callbacks:
+Passing multiple args to event callbacks:\
 https://stackoverflow.com/questions/16053866/javascript-pass-multiple-arguments-to-eventlistener-and-the-event
 
-getEventListeners(object) in devTools:
+getEventListeners(object) in devTools:\
 https://developer.chrome.com/docs/devtools/console/utilities/#monitorEvents-function
 
-monitorEvents() & selecting an element in devTools with ($0):
+monitorEvents() & selecting an element in devTools with ($0):\
 https://stackoverflow.com/questions/10213703/how-do-i-view-events-fired-on-an-element-in-chrome-devtools
 
-How to console.log dataTransfer from drag/drop (use dataTransfer.files);
+How to console.log dataTransfer from drag/drop (use dataTransfer.files);\
 https://timonweb.com/javascript/dragndrop-event-handling-gotchas-i-wish-i-knew-earlier/
+
+Drag preview:\
+https://css-tricks.com/future-css-drag-and-maybe-dragged-image/
+
+https://developer.mozilla.org/en-US/docs/Web/API/HTML_Drag_and_Drop_API/Drag_operations#setting_the_drag_feedback_image
+
+https://developer.mozilla.org/en-US/docs/Web/API/DataTransfer/setDragImage
+
+Tip: use e.target in place of image arg if using the same image in drag preview
 
 ---
 
@@ -156,7 +165,7 @@ https://timonweb.com/javascript/dragndrop-event-handling-gotchas-i-wish-i-knew-e
 **BUG:** npx webpack serve produced the following error:
 
 ```
-Error: Cannot find module 'tslib'
+Error: Cannot find module 'tslib'\
 Require stack:
 
 - /home/megan/repos/portfolio/battleship/node_modules/@jsonjoy.com/fs-node/lib/index.js
