@@ -1,14 +1,20 @@
 import { pubSub } from "./pubsub.js";
 
+// TODO: fix all dependancies on indexed classlists as browsers can change class order.
+
 class DomHandler {
+  // heading
+  p1_heading = document.querySelector("#p1 .name");
+  p2_heading = document.querySelector("#p2 .name");
+
   // ships
-  p1_ships = document.querySelectorAll(".p1 .ship img");
-  p2_ships = document.querySelectorAll(".p2 .ship img");
+  p1_ships = document.querySelectorAll("#p1 .ship-select img");
+  p2_ships = document.querySelectorAll("#p2 .ship-select img");
 
   // Boards
   allBoards = document.querySelectorAll(".board");
-  p1_DOMBoard = document.querySelector(".p1 .board");
-  p2_DOMBoard = document.querySelector(".p2 .board");
+  p1_DOMBoard = document.querySelector("#p1 .board");
+  p2_DOMBoard = document.querySelector("#p2 .board");
 
   shipTarget_Dragging = null;
 
@@ -27,6 +33,10 @@ class DomHandler {
     // pubSub.on("shipsPlaced", this.closeAllModals);
   }
 
+  getShipTarget() {
+    return this.shipTarget_Dragging;
+  }
+
   setShipSelectEvents(pCode) {
     const nodeList = this[`${pCode}_ships`];
     console.log(nodeList);
@@ -42,7 +52,7 @@ class DomHandler {
     const player = shipData[0];
     const shipName = shipData[2];
     const shipSelectNode = document.querySelector(
-      `.${player.pCode} .${shipName} img`
+      `#${player.pCode} .${shipName} img`
     );
     shipSelectNode.classList.remove("dragging");
     shipSelectNode.setAttribute("draggable", false);
@@ -63,6 +73,8 @@ class DomHandler {
           `row_${square.row}`,
           `col_${square.col}`
         );
+        squareBtn.setAttribute("row", square.row);
+        squareBtn.setAttribute("col", square.col);
         DOMBoard.appendChild(squareBtn);
       });
     });
@@ -71,10 +83,10 @@ class DomHandler {
   setShipDropEvents(player) {
     // cycle through squares
     console.log("setBoardEvents called");
-    const squareNodes = document.querySelectorAll(`.${player.pCode} .square`);
+    const squareNodes = document.querySelectorAll(`#${player.pCode} .square`);
     for (let i = 0; i < squareNodes.length; i++) {
       const square = squareNodes[i];
-      square.addEventListener("dragover", events.dragover);
+      square.addEventListener("dragover", events.dragover_bound);
       square.addEventListener("dragenter", events.dragenter);
       square.addEventListener("dragleave", events.dragleave);
       square.addEventListener("drop", events.drop);
@@ -86,7 +98,7 @@ class DomHandler {
       const squareNodes = this.allBoards[i].childNodes;
       for (let i = 0; i < squareNodes.length; i++) {
         const square = squareNodes[i];
-        square.removeEventListener("dragover", events.dragover);
+        square.removeEventListener("dragover", events.dragover_bound);
         square.removeEventListener("dragenter", events.dragenter);
         square.removeEventListener("dragleave", events.dragleave);
         square.removeEventListener("drop", events.drop);
@@ -109,11 +121,17 @@ class DomHandler {
   initBoardUI(player1, player2) {
     this.generateBoard(player1, this.p1_DOMBoard);
     this.generateBoard(player2, this.p2_DOMBoard);
+    this.updatePlayerNames(player1.name, player2.name);
+  }
+
+  updatePlayerNames(player1, player2) {
+    this.p1_heading.textContent = player1;
+    this.p2_heading.textContent = player2;
   }
 
   updateBoard_ShipsPlaced(arr) {
     const player = arr[0];
-    const playerDom = document.querySelector(`.${player.pCode}`);
+    const playerDom = document.querySelector(`#${player.pCode}`);
     const board = player.data.board;
     board.forEach((row) => {
       row.forEach((square) => {
@@ -135,7 +153,7 @@ class DomHandler {
 
   updateBoard_ReceivedAttack(square) {
     const attackedSquare = document.querySelector(
-      `.${square.pCode} .row_${square.row}.col_${square.col}`
+      `#${square.pCode} .row_${square.row}.col_${square.col}`
     );
     if (square.occupyingShipNode !== null) {
       attackedSquare.classList.add("hit");
@@ -173,7 +191,17 @@ class DomHandler {
 }
 
 class Events {
-  constructor() {}
+  shipVariations = {
+    carrier: 5,
+    battleship: 4,
+    destroyer: 3,
+    submarine: 3,
+    ["patrol-boat"]: 2,
+  };
+
+  constructor() {
+    this.dragover_bound = this.dragover.bind(this);
+  }
 
   getPlayerInfo(e) {
     e.preventDefault();
@@ -184,14 +212,14 @@ class Events {
 
   requestRandomize(e) {
     e.preventDefault();
-    const pCode = e.target.closest("dialog").classList[0].slice(0, 2);
+    const pCode = e.target.closest("dialog").parentElement.id;
     pubSub.emit("shipSelectRequest_Randomize", pCode);
     modals.closeForm(e);
   }
 
   requestPickOwn(e) {
     e.preventDefault();
-    const pCode = e.target.closest("dialog").classList[0].slice(0, 2);
+    const pCode = e.target.closest("dialog").parentElement.id;
     console.log(pCode);
     pubSub.emit("setShipEvents", pCode);
     modals.closeForm(e);
@@ -209,9 +237,19 @@ class Events {
 
   dragstart(e) {
     console.log("dragging");
-    e.dataTransfer.setData("text/plain", e.target.closest("div").classList[1]);
+    const shipName = e.target.closest("div").className;
+    e.dataTransfer.setData("text/plain", shipName);
     dom.shipTarget_Dragging = e.target;
     e.target.classList.add("dragging");
+    if (shipName === "carrier") {
+      e.dataTransfer.setDragImage(e.target, 25, 70);
+    } else if (shipName === "battleship") {
+      e.dataTransfer.setDragImage(e.target, 20, 60);
+    } else if (shipName === "patrol-boat") {
+      e.dataTransfer.setDragImage(e.target, 10, 40);
+    } else {
+      e.dataTransfer.setDragImage(e.target, 15, 50);
+    }
   }
 
   dragend(e) {
@@ -221,13 +259,36 @@ class Events {
   }
 
   rotate(e) {
-    const pCodeFromClass = [e.target.closest(".column").classList[0]];
-    const shipNameFromClass = e.target.closest("div").classList[1];
-    pubSub.emit("rotateShip", [pCodeFromClass, shipNameFromClass]);
+    const pCode = e.target.closest(".column").id;
+    const shipName = e.target.closest("div").className;
+    e.target.classList.toggle("y-axis");
+    console.log(pCode, shipName, e.target);
+    pubSub.emit("rotateShip", [pCode, shipName]);
   }
 
   dragover(e) {
     e.preventDefault(); // prevent default to allow drop
+    const pCode = e.target.closest(".column").id;
+    let row = parseInt(e.target.getAttribute("row"));
+    let col = parseInt(e.target.getAttribute("col"));
+    const activeShip = dom.getShipTarget();
+    const activeShipName = activeShip.parentElement.className;
+    const shipLength = this.shipVariations[activeShipName];
+    for (let i = 0; i < shipLength; i++) {
+      let nextSquare;
+      if (activeShip.classList.contains("y-axis")) {
+        const newRow = row++;
+        nextSquare = document.querySelector(
+          `#${pCode} .row_${newRow}.col_${col}`
+        );
+      } else {
+        const newCol = col++;
+        nextSquare = document.querySelector(
+          `#${pCode} .row_${row}.col_${newCol}`
+        );
+      }
+      nextSquare.classList.add("highlighted");
+    }
   }
 
   dragenter(e) {
@@ -236,31 +297,27 @@ class Events {
 
   dragleave(e) {
     e.target.classList.remove("dragover"); // reset bg when dragable element leaves it
+    const board = e.target.closest(".board");
+    for (let i = 0; i < board.childNodes.length; i++) {
+      if (board.childNodes[i].classList.contains("highlighted"))
+        board.childNodes[i].classList.remove("highlighted");
+    }
   }
 
   drop(e) {
     e.preventDefault(); // prevent default (open as link for some elements)
     const square = e.target;
     const shipName = e.dataTransfer.getData("text/plain");
-    const pCode = square.closest(".column").classList[0];
-    const row = parseInt(
-      square.classList[1].charAt(square.classList[1].length - 1)
-    );
-    const col = parseInt(
-      square.classList[2].charAt(square.classList[2].length - 1)
-    );
+    const pCode = square.closest(".column").id;
+    const row = parseInt(e.target.getAttribute("row"));
+    const col = parseInt(e.target.getAttribute("col"));
     pubSub.emit("placeShip", [shipName, pCode, row, col]);
   }
 
   receiveAttack(e) {
-    const square = e.target;
-    const pCode = e.target.closest(".column").classList[0];
-    const row = parseInt(
-      square.classList[1].charAt(square.classList[1].length - 1)
-    );
-    const col = parseInt(
-      square.classList[2].charAt(square.classList[2].length - 1)
-    );
+    const pCode = e.target.closest(".column").id;
+    const row = parseInt(e.target.getAttribute("row"));
+    const col = parseInt(e.target.getAttribute("col"));
     pubSub.emit("receiveAttack", [pCode, row, col]);
   }
 }
@@ -274,22 +331,22 @@ class Modal {
   endGame_Close = document.querySelector(".close");
   endGame_PlayAgain = document.querySelector(".replay");
 
-  p1ShipSelect = document.querySelector(".p1-ships-dialog");
-  p1ShipSelect_span = document.querySelector(".p1-ships-dialog span");
+  p1ShipSelect = document.querySelector("#p1 .ships-dialog");
+  p1ShipSelect_span = document.querySelector("#p1 .ships-dialog span");
   p1ShipSelect_PickOwnShips_Btn = document.querySelector(
-    ".p1-ships-dialog .pick"
+    "#p1 .ships-dialog .pick"
   );
   p1ShipSelect_Randomize = document.querySelector(
-    ".p1-ships-dialog .randomize"
+    "#p1 .ships-dialog .randomize"
   );
 
-  p2ShipSelect = document.querySelector(".p2-ships-dialog");
-  p2ShipSelect_span = document.querySelector(".p2-ships-dialog span");
+  p2ShipSelect = document.querySelector("#p2 .ships-dialog");
+  p2ShipSelect_span = document.querySelector("#p2 .ships-dialog span");
   p2ShipSelect_PickOwnShips_Btn = document.querySelector(
-    ".p2-ships-dialog .pick"
+    "#p2 .ships-dialog .pick"
   );
   p2ShipSelect_Randomize = document.querySelector(
-    ".p2-ships-dialog .randomize"
+    "#p2 .ships-dialog .randomize"
   );
 
   allModals = document.querySelectorAll("dialog");
