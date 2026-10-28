@@ -1,10 +1,6 @@
 import "./style.css";
-import { wpTest } from "./ship.js";
+import { Driver } from "./driver.js";
 
-console.log(wpTest);
+const game = new Driver();
 
-function sum(a, b) {
-  return a + b;
-}
-
-export { sum };
+game.getPlayers();
