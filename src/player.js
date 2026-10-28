@@ -100,11 +100,8 @@ class Computer extends Player {
   splitHitLog() {
     console.log("called splitHitLog");
     this.nearMisses = 0;
-    for (let i = 1; i < this.hitLog.length - 1; i++) {
-      console.log[i];
-      const next = this.hitLog.pop();
-      this.splitTracker.push(next);
-    }
+    this.splitTracker = this.hitLog.slice(1);
+    this.hitLog = this.hitLog.slice(0, 1);
     console.log(this.hitLog);
     console.log(this.splitTracker);
   }
@@ -197,6 +194,10 @@ class Computer extends Player {
           return true;
         }
       });
+    }
+    if (!this.hitLog.length && this.splitTracker.length > 0) {
+      const firstVal = this.splitTracker.shift();
+      this.hitLog.push(firstVal);
     }
     console.log(this.hitLog);
   }
