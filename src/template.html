@@ -48,24 +48,6 @@
         </div>
       </form>
     </dialog>
-    <dialog class="p1-ships-dialog">
-      <div>
-        <legend>Place your ships <span></span>!</legend>
-        <div>
-          <button class="pick">Pick my own</button>
-          <button class="randomize">Randomize</button>
-        </div>
-      </div>
-    </dialog>
-    <dialog class="p2-ships-dialog">
-      <div>
-        <legend>Place your ships <span></span>!</legend>
-        <div>
-          <button class="pick">Pick my own</button>
-          <button class="randomize">Randomize</button>
-        </div>
-      </div>
-    </dialog>
     <dialog class="end-game">
       <button class="close">X</button>
       <p><span></span> wins!</p>
@@ -77,48 +59,66 @@
           <h1>Battleship</h1>
         </div>
         <div class="main">
-          <div class="p1 column">
-            <div class="name">Player One</div>
+          <div id="p1" class="column">
+            <dialog class="ships-dialog">
+              <div>
+                <legend>Place your ships <span></span>!</legend>
+                <div>
+                  <button class="pick">Pick my own</button>
+                  <button class="randomize">Randomize</button>
+                </div>
+              </div>
+            </dialog>
+            <div class="name"><span>Player 1</span></div>
             <div class="board-wrapper">
               <div class="ship-select">
-                <div class="ship carrier">
-                  <img src="./icon/carrier.svg" alt="carrier" />
+                <div class="carrier">
+                  <img src="./icon/carrier.png" alt="carrier" />
                 </div>
-                <div class="ship battleship">
-                  <img src="./icon/battleship.svg" alt="battleship" />
+                <div class="battleship">
+                  <img src="./icon/battleship.png" alt="battleship" />
                 </div>
-                <div class="ship destroyer">
-                  <img src="./icon/destroyer.svg" alt="destroyer" />
+                <div class="destroyer">
+                  <img src="./icon/destroyer.png" alt="destroyer" />
                 </div>
-                <div class="ship submarine">
-                  <img src="./icon/submarine.svg" alt="submarine" />
+                <div class="submarine">
+                  <img src="./icon/submarine.png" alt="submarine" />
                 </div>
-                <div class="ship patrol-boat">
-                  <img src="./icon/patrol-boat.svg" alt="patrol boat" />
+                <div class="patrol-boat">
+                  <img src="./icon/patrol-boat2.png" alt="patrol boat" />
                 </div>
               </div>
               <div class="board"></div>
             </div>
             <div class="ship-data"></div>
           </div>
-          <div class="p2 column">
-            <div class="name">Computer</div>
+          <div id="p2" class="column">
+            <dialog class="ships-dialog">
+              <div>
+                <legend>Place your ships <span></span>!</legend>
+                <div>
+                  <button class="pick">Pick my own</button>
+                  <button class="randomize">Randomize</button>
+                </div>
+              </div>
+            </dialog>
+            <div class="name"><span>Player 2</span></div>
             <div class="board-wrapper">
               <div class="ship-select">
-                <div class="ship carrier">
-                  <img src="./icon/carrier.svg" alt="carrier" />
+                <div class="carrier">
+                  <img src="./icon/carrier.png" alt="carrier" />
                 </div>
-                <div class="ship battleship">
-                  <img src="./icon/battleship.svg" alt="battleship" />
+                <div class="battleship">
+                  <img src="./icon/battleship.png" alt="battleship" />
                 </div>
-                <div class="ship destroyer">
-                  <img src="./icon/destroyer.svg" alt="destroyer" />
+                <div class="destroyer">
+                  <img src="./icon/destroyer.png" alt="destroyer" />
                 </div>
-                <div class="ship submarine">
-                  <img src="./icon/submarine.svg" alt="submarine" />
+                <div class="submarine">
+                  <img src="./icon/submarine.png" alt="submarine" />
                 </div>
-                <div class="ship patrol-boat">
-                  <img src="./icon/patrol-boat.svg" alt="patrol boat" />
+                <div class="patrol-boat">
+                  <img src="./icon/patrol-boat2.png" alt="patrol boat" />
                 </div>
               </div>
               <div class="board"></div>
